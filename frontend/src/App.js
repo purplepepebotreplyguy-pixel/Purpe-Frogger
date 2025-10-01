@@ -56,7 +56,7 @@ function App() {
         
         {/* Hero Header */}
         <header className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-sm"></div>
+          <div className="absolute inset-0" style={{background: 'linear-gradient(135deg, rgba(0, 208, 130, 0.3) 0%, rgba(6, 147, 227, 0.3) 50%, rgba(155, 81, 224, 0.3) 100%)', backdropFilter: 'blur(10px)'}}></div>
           <div className="relative container mx-auto px-6 py-12 text-center">
             <div className="mb-8">
               {/* Frog Character Images */}
