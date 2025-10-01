@@ -67,7 +67,7 @@ function App() {
                   className="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-2xl border-4 border-purple-400/50 hover:scale-110 transition-transform duration-300"
                 />
                 <div className="text-center">
-                  <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                  <h1 className="text-6xl md:text-8xl font-bold mb-2" style={{background: 'linear-gradient(135deg, #00d084 0%, #0693e3 50%, #9b51e0 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
                     Purpe's Leap
                   </h1>
                 </div>
