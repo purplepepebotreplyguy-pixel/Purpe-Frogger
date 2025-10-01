@@ -478,10 +478,11 @@ async def claim_reward(
     """Claim reward for authenticated user"""
     try:
         wallet_address = current_user["wallet_address"]
+        demo_mode = current_user.get("demo_mode", False)
         reward_type = request.reward_type
         
         # Check eligibility
-        eligibility = await check_reward_eligibility(wallet_address)
+        eligibility = await check_reward_eligibility(wallet_address, demo_mode)
         
         if not eligibility["eligible"]:
             return RewardResponse(
@@ -490,22 +491,32 @@ async def claim_reward(
                 next_eligible=eligibility.get("next_eligible")
             )
         
-        # Calculate reward amount
-        reward_amounts = {
-            "game_completion": 0.005,  # 0.005 SOL per game completion
-            "level_completion": 0.002,  # 0.002 SOL per level
-            "daily_bonus": 0.01        # 0.01 SOL daily bonus
-        }
+        # Calculate reward amount based on mode
+        if demo_mode:
+            reward_amounts = {
+                "game_completion": 0.002,  # Reduced for demo
+                "level_completion": 0.001,  # Reduced for demo
+                "daily_bonus": 0.005       # Reduced for demo
+            }
+        else:
+            reward_amounts = {
+                "game_completion": 0.005,  # 0.005 SOL per game completion
+                "level_completion": 0.002,  # 0.002 SOL per level
+                "daily_bonus": 0.01        # 0.01 SOL daily bonus
+            }
         
-        reward_amount = reward_amounts.get(reward_type, 0.005)
-        max_reward = float(os.getenv("MAX_SINGLE_REWARD_SOL", "0.01"))
+        reward_amount = reward_amounts.get(reward_type, 0.002 if demo_mode else 0.005)
+        max_reward = 0.005 if demo_mode else float(os.getenv("MAX_SINGLE_REWARD_SOL", "0.01"))
         reward_amount = min(reward_amount, max_reward)
         
         # For MVP, we'll mock the SOL transfer
         # In production, implement actual Solana transaction
-        mock_signature = f"mock_tx_{int(time.time())}_{secrets.token_hex(8)}"
-        
-        logger.info(f"Mock SOL reward of {reward_amount} sent to {wallet_address}")
+        if demo_mode:
+            mock_signature = f"demo_tx_{int(time.time())}_{secrets.token_hex(8)}"
+            logger.info(f"Demo mode reward of {reward_amount} SOL for {wallet_address}")
+        else:
+            mock_signature = f"mock_tx_{int(time.time())}_{secrets.token_hex(8)}"
+            logger.info(f"Mock SOL reward of {reward_amount} sent to {wallet_address}")
         
         # Update daily rewards tracking
         daily_key = get_daily_key(wallet_address)
@@ -524,6 +535,7 @@ async def claim_reward(
             "reward_type": reward_type,
             "transaction_signature": mock_signature,
             "status": "completed",
+            "demo_mode": demo_mode,
             "created_at": datetime.now(timezone.utc)
         }
         
