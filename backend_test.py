@@ -111,7 +111,10 @@ class PurpeLeapAPITester:
         if success and 'challenge_key' in response:
             self.challenge_key = response['challenge_key']
             self.test_wallet = test_wallet
+            print(f"   Challenge key received: {self.challenge_key[:20]}...")
             return True
+        else:
+            print(f"   Response keys: {list(response.keys()) if response else 'No response'}")
         return False
 
     def test_auth_verify(self):
