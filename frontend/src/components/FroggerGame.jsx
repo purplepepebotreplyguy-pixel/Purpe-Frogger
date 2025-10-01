@@ -649,16 +649,29 @@ export const FroggerGame = ({ walletReady, authToken, onRewardEarned, userStats 
       </div>
 
       {/* Game controls */}
-      <div className="flex space-x-4">
+      <div className="flex flex-col items-center space-y-4">
         {gameState === 'menu' && (
-          <button
-            onClick={startGameSession}
-            disabled={!walletReady}
-            className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg"
-            data-testid="start-game-btn"
-          >
-            {walletReady ? 'Start Your Leap! 🐸' : 'Connect Wallet to Play'}
-          </button>
+          <div className="flex space-x-4">
+            <button
+              onClick={startGameSession}
+              disabled={!walletReady}
+              className="px-8 py-3 text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg"
+              style={{background: walletReady ? 'linear-gradient(135deg, #00d084 0%, #0693e3 100%)' : 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'}}
+              data-testid="start-game-btn"
+            >
+              {walletReady ? 'Start Your Leap! 🐸' : 'Connect Wallet to Play'}
+            </button>
+            
+            {/* Force start for demo or testing */}
+            <button
+              onClick={forceStartGame}
+              className="px-6 py-3 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg"
+              style={{background: 'linear-gradient(135deg, #ff6900 0%, #cf2e2e 100%)'}}
+              data-testid="force-start-btn"
+            >
+              🎮 Quick Start
+            </button>
+          </div>
         )}
 
         {gameState === 'game_over' && (
