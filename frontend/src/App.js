@@ -246,11 +246,13 @@ function App() {
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-gray-400/20">
-                  <h4 className="text-lg font-semibold text-gray-100 mb-2">🎯 Rewards</h4>
+                  <h4 className="text-lg font-semibold text-gray-100 mb-2">🎯 PURPE Rewards</h4>
                   <div className="space-y-1 text-sm text-gray-300">
-                    <div>• Level completion: 0.005 SOL</div>
-                    <div>• Daily bonus: 0.01 SOL</div>
-                    <div>• Daily limit: 0.1 SOL maximum</div>
+                    <div>• Level completion: 0.5 PURPE</div>
+                    <div>• Game completion: 1.0 PURPE</div>
+                    <div>• Daily bonus: 2.0 PURPE</div>
+                    <div>• Daily limit: 10 PURPE maximum (IP locked)</div>
+                    <div>• Demo mode: No rewards earned</div>
                   </div>
                 </div>
               </div>
