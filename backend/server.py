@@ -468,17 +468,19 @@ async def get_reward_eligibility(request: Request, current_user: dict = Depends(
 
 @app.post("/api/rewards/claim", response_model=RewardResponse)
 async def claim_reward(
-    request: RewardClaim,
+    reward_request: RewardClaim,
+    request: Request,
     current_user: dict = Depends(get_current_user)
 ):
     """Claim reward for authenticated user"""
     try:
         wallet_address = current_user["wallet_address"]
         demo_mode = current_user.get("demo_mode", False)
-        reward_type = request.reward_type
+        reward_type = reward_request.reward_type
+        client_ip = get_client_ip(request)
         
         # Check eligibility
-        eligibility = await check_reward_eligibility(wallet_address, demo_mode)
+        eligibility = await check_reward_eligibility(wallet_address, demo_mode, client_ip)
         
         if not eligibility["eligible"]:
             return RewardResponse(
@@ -487,32 +489,28 @@ async def claim_reward(
                 next_eligible=eligibility.get("next_eligible")
             )
         
-        # Calculate reward amount based on mode
+        # Demo mode users get no rewards
         if demo_mode:
-            reward_amounts = {
-                "game_completion": 0.002,  # Reduced for demo
-                "level_completion": 0.001,  # Reduced for demo
-                "daily_bonus": 0.005       # Reduced for demo
-            }
-        else:
-            reward_amounts = {
-                "game_completion": 0.005,  # 0.005 SOL per game completion
-                "level_completion": 0.002,  # 0.002 SOL per level
-                "daily_bonus": 0.01        # 0.01 SOL daily bonus
-            }
+            return RewardResponse(
+                success=False,
+                error="Demo mode does not earn rewards. Connect wallet with PURPE tokens to earn rewards."
+            )
         
-        reward_amount = reward_amounts.get(reward_type, 0.002 if demo_mode else 0.005)
-        max_reward = 0.005 if demo_mode else float(os.getenv("MAX_SINGLE_REWARD_SOL", "0.01"))
+        # Calculate PURPE reward amount
+        reward_amounts = {
+            "game_completion": 1.0,  # 1 PURPE per game completion
+            "level_completion": 0.5,  # 0.5 PURPE per level
+            "daily_bonus": 2.0        # 2 PURPE daily bonus
+        }
+        
+        reward_amount = reward_amounts.get(reward_type, 1.0)
+        max_reward = float(os.getenv("MAX_SINGLE_REWARD_PURPE", "2.0"))
         reward_amount = min(reward_amount, max_reward)
         
-        # For MVP, we'll mock the SOL transfer
-        # In production, implement actual Solana transaction
-        if demo_mode:
-            mock_signature = f"demo_tx_{int(time.time())}_{secrets.token_hex(8)}"
-            logger.info(f"Demo mode reward of {reward_amount} SOL for {wallet_address}")
-        else:
-            mock_signature = f"mock_tx_{int(time.time())}_{secrets.token_hex(8)}"
-            logger.info(f"Mock SOL reward of {reward_amount} sent to {wallet_address}")
+        # For MVP, we'll mock the PURPE transfer
+        # In production, implement actual token transfer
+        mock_signature = f"purpe_tx_{int(time.time())}_{secrets.token_hex(8)}"
+        logger.info(f"Mock PURPE reward of {reward_amount} sent to {wallet_address}")
         
         # Update daily rewards tracking
         daily_key = get_daily_key(wallet_address)
@@ -527,6 +525,7 @@ async def claim_reward(
         reward_record = {
             "id": str(uuid.uuid4()),
             "wallet_address": wallet_address,
+            "client_ip": client_ip,
             "amount": reward_amount,
             "reward_type": reward_type,
             "transaction_signature": mock_signature,
@@ -539,7 +538,7 @@ async def claim_reward(
         
         return RewardResponse(
             success=True,
-            amount_sol=reward_amount,
+            amount_sol=reward_amount,  # Will change this field name later
             transaction_signature=mock_signature,
             reward_type=reward_type
         )
