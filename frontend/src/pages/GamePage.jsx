@@ -245,7 +245,7 @@ export const GamePage = () => {
   };
 
   // Initialize game state - 8-bit grid positioning
-  const initializeGame = () => {
+  const initializeGame = useCallback(() => {
     setCurrentLevel(1);
     setScore(0);
     setLives(3);
@@ -261,7 +261,7 @@ export const GamePage = () => {
     setObstacles(initializeLevel(1));
     setLevelStartTime(Date.now());
     setGameState('playing');
-  };
+  }, [initializeLevel]);
 
   // Force start game
   const forceStartGame = () => {
