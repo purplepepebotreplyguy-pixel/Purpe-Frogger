@@ -169,11 +169,12 @@ export const WalletInterface = ({ onWalletReady, tokenBalance, setTokenBalance }
           
           {/* Demo Mode Button */}
           <div className="text-center">
-            <div className="text-emerald-200 text-sm mb-2">or</div>
+            <div className="text-white text-sm mb-2">or</div>
             <button
               onClick={authenticateDemoMode}
               disabled={authenticating}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{background: 'linear-gradient(135deg, #ff6900 0%, #cf2e2e 100%)'}}
               data-testid="demo-mode-btn"
             >
               {authenticating ? (
