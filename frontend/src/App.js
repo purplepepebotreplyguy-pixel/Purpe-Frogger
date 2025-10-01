@@ -183,7 +183,7 @@ function App() {
               {userStats && (
                 <div className="rounded-2xl border border-white/20 p-6 shadow-2xl" style={{background: 'linear-gradient(135deg, rgba(6, 147, 227, 0.9) 0%, rgba(155, 81, 224, 0.7) 100%)', backdropFilter: 'blur(20px)'}}>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold text-blue-100">📊 Quick Stats</h3>
+                    <h3 className="text-xl font-bold" style={{color: '#ffffff'}}>📊 Quick Stats</h3>
                     {isDemoMode && (
                       <span className="bg-purple-600/50 text-purple-200 px-2 py-1 rounded-full text-xs font-semibold">
                         DEMO
