@@ -205,16 +205,52 @@ def get_daily_key(wallet_address: str) -> str:
     today = datetime.now(timezone.utc).date()
     return f"{wallet_address}:{today}"
 
-async def check_reward_eligibility(wallet_address: str) -> Dict:
+async def check_reward_eligibility(wallet_address: str, demo_mode: bool = False) -> Dict:
     """Check if user is eligible for rewards"""
     try:
-        # Check PURPE balance requirement
+        # For demo mode, use relaxed eligibility (but still enforce rate limits)
+        if demo_mode:
+            # Check daily limits for demo users
+            daily_key = get_daily_key(wallet_address)
+            daily_rewards = user_rewards_today.get(daily_key, {"count": 0, "total_amount": 0, "last_reward": 0})
+            
+            # Demo users get reduced daily limit
+            demo_daily_limit = 0.05  # 0.05 SOL max for demo users
+            
+            if daily_rewards["total_amount"] >= demo_daily_limit:
+                tomorrow = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+                return {
+                    "eligible": False,
+                    "reason": "Demo daily limit reached (0.05 SOL max for demo mode)",
+                    "next_eligible": tomorrow.isoformat(),
+                    "demo_mode": True
+                }
+            
+            # Check minimum interval (shorter for demo)
+            demo_min_interval = 60  # 1 minute for demo users
+            if daily_rewards["last_reward"] and (time.time() - daily_rewards["last_reward"]) < demo_min_interval:
+                next_eligible = datetime.fromtimestamp(daily_rewards["last_reward"] + demo_min_interval, timezone.utc)
+                return {
+                    "eligible": False,
+                    "reason": f"Must wait {demo_min_interval} seconds between rewards (demo mode)",
+                    "next_eligible": next_eligible.isoformat(),
+                    "demo_mode": True
+                }
+            
+            return {
+                "eligible": True,
+                "remaining_daily_amount": demo_daily_limit - daily_rewards["total_amount"],
+                "demo_mode": True
+            }
+        
+        # Regular user flow - check PURPE balance requirement
         balance_info = await get_purpe_token_balance(wallet_address)
         
         if not balance_info["has_minimum_balance"]:
             return {
                 "eligible": False,
-                "reason": f"Insufficient PURPE balance. Need minimum ${os.getenv('MINIMUM_PURPE_USD_REQUIREMENT', '10')} USD worth of PURPE tokens."
+                "reason": f"Insufficient PURPE balance. Need minimum ${os.getenv('MINIMUM_PURPE_USD_REQUIREMENT', '10')} USD worth of PURPE tokens.",
+                "demo_mode": False
             }
         
         # Check daily limits
@@ -228,7 +264,8 @@ async def check_reward_eligibility(wallet_address: str) -> Dict:
             return {
                 "eligible": False,
                 "reason": "Daily reward limit reached",
-                "next_eligible": tomorrow.isoformat()
+                "next_eligible": tomorrow.isoformat(),
+                "demo_mode": False
             }
         
         # Check minimum interval
@@ -238,17 +275,19 @@ async def check_reward_eligibility(wallet_address: str) -> Dict:
             return {
                 "eligible": False,
                 "reason": f"Must wait {min_interval} seconds between rewards",
-                "next_eligible": next_eligible.isoformat()
+                "next_eligible": next_eligible.isoformat(),
+                "demo_mode": False
             }
         
         return {
             "eligible": True,
-            "remaining_daily_amount": daily_limit - daily_rewards["total_amount"]
+            "remaining_daily_amount": daily_limit - daily_rewards["total_amount"],
+            "demo_mode": False
         }
         
     except Exception as e:
         logger.error(f"Error checking reward eligibility: {e}")
-        return {"eligible": False, "reason": "Unable to verify eligibility"}
+        return {"eligible": False, "reason": "Unable to verify eligibility", "demo_mode": demo_mode}
 
 # API Routes
 
