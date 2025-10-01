@@ -59,9 +59,24 @@ function App() {
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-sm"></div>
           <div className="relative container mx-auto px-6 py-12 text-center">
             <div className="mb-8">
-              <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-                Purpe's Leap
-              </h1>
+              {/* Frog Character Images */}
+              <div className="flex justify-center items-center space-x-8 mb-6">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_leap-game-1/artifacts/98rfagje_image.png"
+                  alt="Diamond Purpe - Wealthy Frog Character"
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-2xl border-4 border-purple-400/50 hover:scale-110 transition-transform duration-300"
+                />
+                <div className="text-center">
+                  <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                    Purpe's Leap
+                  </h1>
+                </div>
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_leap-game-1/artifacts/b0u4h0la_image.png"
+                  alt="Melting Purpe - Mystical Frog Character"
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-2xl border-4 border-pink-400/50 hover:scale-110 transition-transform duration-300"
+                />
+              </div>
               <p className="text-xl md:text-2xl text-purple-200 mb-2">
                 Web3 Frogger on Solana
               </p>
