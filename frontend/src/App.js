@@ -77,10 +77,10 @@ function App() {
                   className="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-2xl border-4 border-pink-400/50 hover:scale-110 transition-transform duration-300"
                 />
               </div>
-              <p className="text-xl md:text-2xl text-purple-200 mb-2">
+              <p className="text-xl md:text-2xl mb-2" style={{color: '#8ed1fc'}}>
                 Web3 Frogger on Solana
               </p>
-              <p className="text-lg text-purple-300 max-w-2xl mx-auto">
+              <p className="text-lg max-w-2xl mx-auto" style={{color: '#ffffff'}}>
                 Guide Purpe the purple frog through perilous waters and earn real SOL rewards! 
                 Play-to-earn gaming powered by Solana blockchain.
               </p>
