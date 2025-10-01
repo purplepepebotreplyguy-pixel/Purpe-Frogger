@@ -237,11 +237,26 @@ async def check_reward_eligibility(wallet_address: str, demo_mode: bool = False,
                 "demo_mode": False
             }
         
+        # Check IP-based limits (10 PURPE max per IP)
+        if client_ip:
+            ip_rewards = await db.reward_transactions.find(
+                {"client_ip": client_ip, "status": "completed"}
+            ).to_list(None)
+            total_ip_rewards = sum(reward["amount"] for reward in ip_rewards)
+            max_per_ip = float(os.getenv("MAX_PURPE_PER_IP", "10.0"))
+            
+            if total_ip_rewards >= max_per_ip:
+                return {
+                    "eligible": False,
+                    "reason": f"IP address has reached maximum limit of {max_per_ip} PURPE tokens",
+                    "demo_mode": False
+                }
+        
         # Check daily limits
         daily_key = get_daily_key(wallet_address)
         daily_rewards = user_rewards_today.get(daily_key, {"count": 0, "total_amount": 0, "last_reward": 0})
         
-        daily_limit = float(os.getenv("DAILY_SOL_REWARD_LIMIT", "0.1"))
+        daily_limit = float(os.getenv("DAILY_PURPE_REWARD_LIMIT", "10.0"))
         
         if daily_rewards["total_amount"] >= daily_limit:
             tomorrow = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
