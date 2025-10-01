@@ -1,53 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { WalletContextProvider } from './components/WalletContextProvider';
-import { WalletInterface } from './components/WalletInterface';
-import { FroggerGame } from './components/FroggerGame';
-import { RewardSystem } from './components/RewardSystem';
-import { Leaderboard } from './components/Leaderboard';
-import { Toaster, toast } from 'sonner';
+import { LandingPage } from './pages/LandingPage';
+import { GamePage } from './pages/GamePage';
 
 function App() {
-  const [walletReady, setWalletReady] = useState(false);
-  const [tokenBalance, setTokenBalance] = useState(null);
-  const [authToken, setAuthToken] = useState(localStorage.getItem('auth_token'));
-  const [userStats, setUserStats] = useState(null);
-  const [activeTab, setActiveTab] = useState('game');
-
-  // Handle wallet readiness change
-  const handleWalletReady = (ready) => {
-    setWalletReady(ready);
-  };
-
-  // Handle reward earned
-  const handleRewardEarned = (reward) => {
-    toast.success(
-      `🎉 Reward Earned! +${reward.amount.toFixed(6)} SOL`,
-      {
-        description: `Transaction: ${reward.signature?.slice(0, 16)}...`,
-        duration: 5000,
-      }
-    );
-    
-    // Refresh stats after earning reward
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  };
-
-  // Handle stats update
-  const handleStatsUpdate = (stats) => {
-    setUserStats(stats);
-  };
-
-  // Update auth token when wallet interface changes it
-  useEffect(() => {
-    const token = localStorage.getItem('auth_token');
-    setAuthToken(token);
-  }, []);
-
-  // Check if in demo mode
-  const isDemoMode = localStorage.getItem('demo_mode') === 'true';
 
   return (
     <WalletContextProvider>
