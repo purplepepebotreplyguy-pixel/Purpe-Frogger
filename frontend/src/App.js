@@ -318,16 +318,16 @@ function App() {
                       <span>No PURPE tokens required</span>
                     </div>
                     <div className="flex items-center">
-                      <span className="w-2 h-2 bg-yellow-400 rounded-full mr-2"></span>
-                      <span>0.05 SOL daily limit</span>
+                      <span className="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
+                      <span>No PURPE rewards earned</span>
                     </div>
                     <div className="flex items-center">
                       <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
-                      <span>1 minute reward cooldown</span>
+                      <span>Full gameplay experience</span>
                     </div>
                     <div className="flex items-center">
                       <span className="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
-                      <span>Full game access</span>
+                      <span>Perfect for testing & learning</span>
                     </div>
                   </div>
                   <div className="mt-4 p-3 bg-purple-600/30 rounded-lg">
