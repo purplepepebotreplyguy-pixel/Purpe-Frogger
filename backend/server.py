@@ -332,7 +332,8 @@ async def verify_wallet_signature(request: SignatureVerification):
         # Create JWT token
         token_data = {
             "wallet_address": wallet_address,
-            "verified_at": datetime.now(timezone.utc).isoformat()
+            "verified_at": datetime.now(timezone.utc).isoformat(),
+            "demo_mode": False
         }
         
         token = create_jwt_token(token_data)
@@ -352,6 +353,35 @@ async def verify_wallet_signature(request: SignatureVerification):
     except Exception as e:
         logger.error(f"Error verifying signature: {e}")
         raise HTTPException(status_code=500, detail="Signature verification failed")
+
+@app.post("/api/auth/demo")
+async def create_demo_session():
+    """Create a demo session without wallet requirements"""
+    try:
+        # Generate demo user ID
+        demo_user_id = f"demo_{int(time.time())}_{secrets.token_hex(4)}"
+        
+        # Create JWT token for demo mode
+        token_data = {
+            "wallet_address": demo_user_id,
+            "verified_at": datetime.now(timezone.utc).isoformat(),
+            "demo_mode": True
+        }
+        
+        token = create_jwt_token(token_data)
+        
+        return {
+            "success": True,
+            "access_token": token,
+            "token_type": "bearer",
+            "expires_in": 86400,
+            "demo_mode": True,
+            "demo_user_id": demo_user_id
+        }
+        
+    except Exception as e:
+        logger.error(f"Error creating demo session: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create demo session")
 
 @app.get("/api/token/balance/{wallet_address}", response_model=TokenBalance)
 async def get_token_balance(wallet_address: str):
