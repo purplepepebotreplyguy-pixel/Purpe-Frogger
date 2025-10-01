@@ -20,16 +20,15 @@ module.exports = {
         stream: require.resolve('stream-browserify'),
         buffer: require.resolve('buffer'),
         process: require.resolve('process/browser'),
-        'process/browser': require.resolve('process/browser'),
         fs: false,
         net: false,
         tls: false,
       };
 
-      // Handle module resolution issues
-      webpackConfig.resolve.extensionAlias = {
-        '.js': ['.js', '.ts', '.tsx'],
-        '.mjs': ['.mjs', '.js'],
+      // Add aliases to handle module resolution issues
+      webpackConfig.resolve.alias = {
+        ...webpackConfig.resolve.alias,
+        'process/browser': require.resolve('process/browser'),
       };
 
       // Add buffer plugin
