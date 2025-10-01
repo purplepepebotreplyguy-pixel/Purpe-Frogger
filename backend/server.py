@@ -18,7 +18,6 @@ from dotenv import load_dotenv
 
 # Solana imports
 from solathon import Client, PublicKey
-from solathon.core.instructions import get_associated_token_address
 import httpx
 import secrets
 import hashlib
