@@ -140,11 +140,15 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     try:
         payload = verify_jwt_token(credentials.credentials)
         wallet_address = payload.get("wallet_address")
+        demo_mode = payload.get("demo_mode", False)
         
         if not wallet_address:
             raise HTTPException(status_code=401, detail="Invalid token")
             
-        return {"wallet_address": wallet_address}
+        return {
+            "wallet_address": wallet_address,
+            "demo_mode": demo_mode
+        }
     except HTTPException:
         raise
     except Exception as e:
