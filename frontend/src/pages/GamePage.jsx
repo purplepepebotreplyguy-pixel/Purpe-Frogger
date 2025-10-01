@@ -714,53 +714,68 @@ export const GamePage = () => {
       ctx.fillRect(frogPosition.x + 8, frogPosition.y + 8, 2, 2);
       ctx.fillRect(frogPosition.x + 18, frogPosition.y + 8, 2, 2);
 
-      // HUD
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-      ctx.fillRect(0, 0, GAME_WIDTH, 40);
+      // 8-bit HUD
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+      ctx.fillRect(0, 0, GAME_WIDTH, 32);
       
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '18px Inter';
+      ctx.fillStyle = COLORS.text;
+      ctx.font = '14px monospace';
       ctx.textAlign = 'left';
-      ctx.fillText(`Level: ${currentLevel}`, 10, 25);
-      ctx.fillText(`Score: ${score}`, 150, 25);
-      ctx.fillText(`Lives: ${'❤️'.repeat(lives)}`, 300, 25);
+      ctx.fillText(`LVL:${currentLevel}`, 8, 20);
+      ctx.fillText(`SCORE:${score}`, 80, 20);
+      ctx.fillText(`LIVES:${lives}`, 180, 20);
       
       if (userStats) {
         ctx.textAlign = 'right';
-        ctx.fillText(`Daily: ${userStats.daily_rewards_claimed}/10`, GAME_WIDTH - 10, 25);
+        ctx.fillText(`DAILY:${userStats.daily_rewards_claimed}/10`, GAME_WIDTH - 8, 20);
       }
 
-      // Game state overlays
+      // Level title at bottom
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+      ctx.fillRect(0, GAME_HEIGHT - 32, GAME_WIDTH, 32);
+      ctx.fillStyle = COLORS.text;
+      ctx.font = 'bold 16px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`LEVEL ${currentLevel}: ${levelConfig?.name?.toUpperCase()}`, GAME_WIDTH / 2, GAME_HEIGHT - 10);
+
+      // 8-bit style overlays
       if (gameState === 'level_complete') {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
         ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         
-        ctx.fillStyle = '#10b981';
-        ctx.font = 'bold 32px Inter';
+        ctx.fillStyle = '#00FF00';
+        ctx.font = 'bold 24px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(`${levelConfig?.name} Complete!`, GAME_WIDTH / 2, GAME_HEIGHT / 2);
-        ctx.font = '18px Inter';
-        ctx.fillText('Get ready for the next level...', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 40);
+        ctx.fillText(`${levelConfig?.name?.toUpperCase()} COMPLETE!`, GAME_WIDTH / 2, GAME_HEIGHT / 2);
+        ctx.font = '16px monospace';
+        ctx.fillText('LOADING NEXT LEVEL...', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 40);
       }
 
       if (gameState === 'game_over') {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
         ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         
-        ctx.fillStyle = lives <= 0 ? '#ef4444' : '#10b981';
-        ctx.font = 'bold 32px Inter';
+        ctx.fillStyle = lives <= 0 ? '#FF0000' : '#00FF00';
+        ctx.font = 'bold 32px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(lives <= 0 ? 'Game Over' : 'Victory!', GAME_WIDTH / 2, GAME_HEIGHT / 2);
-        ctx.font = '18px Inter';
-        ctx.fillText(`Final Score: ${score}`, GAME_WIDTH / 2, GAME_HEIGHT / 2 + 40);
-        ctx.fillText(`Levels Completed: ${currentLevel - (lives <= 0 ? 1 : 0)}`, GAME_WIDTH / 2, GAME_HEIGHT / 2 + 70);
+        ctx.fillText(lives <= 0 ? 'GAME OVER' : 'VICTORY!', GAME_WIDTH / 2, GAME_HEIGHT / 2);
+        ctx.font = '16px monospace';
+        ctx.fillText(`FINAL SCORE: ${score}`, GAME_WIDTH / 2, GAME_HEIGHT / 2 + 40);
+        ctx.fillText(`LEVELS: ${currentLevel - (lives <= 0 ? 1 : 0)}`, GAME_WIDTH / 2, GAME_HEIGHT / 2 + 70);
       }
     };
 
     render();
-    animationRef.current = requestAnimationFrame(() => {
-      if (canvasRef.current) render();
-    });
+    
+    // Continuous rendering loop for smooth animation
+    const animate = () => {
+      if (canvasRef.current && gameState === 'playing') {
+        render();
+      }
+      animationRef.current = requestAnimationFrame(animate);
+    };
+    
+    animate();
 
     return () => {
       if (animationRef.current) {
