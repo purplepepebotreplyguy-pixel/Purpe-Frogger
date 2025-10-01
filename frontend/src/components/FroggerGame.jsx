@@ -136,7 +136,7 @@ export const FroggerGame = ({ walletReady, authToken, onRewardEarned, userStats 
     }
   };
 
-  // Handle keyboard input
+  // Handle keyboard and mouse input
   useEffect(() => {
     const handleKeyDown = (e) => {
       setKeys(prev => ({ ...prev, [e.key]: true }));
@@ -146,14 +146,70 @@ export const FroggerGame = ({ walletReady, authToken, onRewardEarned, userStats 
       setKeys(prev => ({ ...prev, [e.key]: false }));
     };
 
+    // Mouse click controls for canvas
+    const handleCanvasClick = (e) => {
+      if (gameState !== 'playing') return;
+      
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Scale coordinates to game size
+      const gameX = (x / rect.width) * GAME_WIDTH;
+      const gameY = (y / rect.height) * GAME_HEIGHT;
+      
+      // Calculate movement direction based on click position relative to frog
+      const frogCenterX = frogPosition.x + FROG_SIZE / 2;
+      const frogCenterY = frogPosition.y + FROG_SIZE / 2;
+      
+      const dx = gameX - frogCenterX;
+      const dy = gameY - frogCenterY;
+      
+      // Move frog in direction of click
+      setFrogPosition(prev => {
+        let newX = prev.x;
+        let newY = prev.y;
+        
+        if (Math.abs(dx) > Math.abs(dy)) {
+          // Horizontal movement
+          if (dx > 0) {
+            newX = Math.min(GAME_WIDTH - FROG_SIZE, prev.x + GRID_SIZE);
+          } else {
+            newX = Math.max(0, prev.x - GRID_SIZE);
+          }
+        } else {
+          // Vertical movement
+          if (dy > 0) {
+            newY = Math.min(GAME_HEIGHT - FROG_SIZE, prev.y + GRID_SIZE);
+          } else {
+            newY = Math.max(0, prev.y - GRID_SIZE);
+            setScore(s => s + 10); // Score for moving forward
+          }
+        }
+        
+        return { x: newX, y: newY };
+      });
+    };
+
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
+
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.addEventListener('click', handleCanvasClick);
+    }
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
+      if (canvas) {
+        canvas.removeEventListener('click', handleCanvasClick);
+      }
     };
-  }, []);
+  }, [gameState, frogPosition]);
 
   // Handle frog movement
   useEffect(() => {
