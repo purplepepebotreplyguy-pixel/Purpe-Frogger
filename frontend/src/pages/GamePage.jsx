@@ -103,25 +103,89 @@ export const GamePage = () => {
   const [keys, setKeys] = useState({});
   const [lastMoveTime, setLastMoveTime] = useState(0);
 
-  // Initialize obstacles for current level
+  // Initialize obstacles for current level - 8-bit grid system
   const initializeLevel = useCallback((level) => {
     const levelConfig = LEVELS[level];
     if (!levelConfig) return [];
 
     const newObstacles = [];
-    levelConfig.obstacles.forEach((obstacleConfig, index) => {
-      const numObstacles = Math.floor(GAME_WIDTH / obstacleConfig.spacing) + 2;
-      for (let i = 0; i < numObstacles; i++) {
-        newObstacles.push({
-          id: `${index}-${i}`,
-          type: obstacleConfig.type,
-          x: (i * obstacleConfig.spacing) - (Math.random() * obstacleConfig.spacing),
-          y: obstacleConfig.y,
-          width: obstacleConfig.width,
-          height: 30,
-          speed: obstacleConfig.speed,
-          direction: obstacleConfig.speed > 0 ? 1 : -1
-        });
+    
+    levelConfig.rows.forEach((row, rowIndex) => {
+      if (row.type === 'safe' || row.type === 'water') return;
+      
+      const y = row.y * GRID_SIZE;
+      
+      if (row.type === 'lily_pad') {
+        // Create lily pads across the row
+        for (let col = row.offset || 0; col < GRID_COLS; col += row.spacing || 3) {
+          newObstacles.push({
+            id: `lily_pad_${row.y}_${col}`,
+            type: 'lily_pad',
+            x: col * GRID_SIZE,
+            y: y,
+            gridX: col,
+            gridY: row.y,
+            width: GRID_SIZE,
+            height: GRID_SIZE,
+            speed: row.speed || 0,
+            safe: true
+          });
+        }
+      } else if (row.type === 'log') {
+        // Create moving logs
+        const logLength = row.length || 3;
+        const numLogs = Math.ceil(GRID_COLS / (row.spacing || 6)) + 1;
+        
+        for (let i = 0; i < numLogs; i++) {
+          const startX = (i * (row.spacing || 6) * GRID_SIZE) + ((row.offset || 0) * GRID_SIZE);
+          newObstacles.push({
+            id: `log_${row.y}_${i}`,
+            type: 'log',
+            x: startX,
+            y: y,
+            width: logLength * GRID_SIZE,
+            height: GRID_SIZE,
+            speed: row.speed || 1,
+            safe: true,
+            length: logLength
+          });
+        }
+      } else if (row.type === 'rocks') {
+        // Create decorative rocks
+        for (let col = 0; col < GRID_COLS; col += row.spacing || 4) {
+          const rockCol = col + Math.floor(Math.random() * 2); // Some randomness
+          if (rockCol < GRID_COLS) {
+            newObstacles.push({
+              id: `rock_${row.y}_${rockCol}`,
+              type: 'rock',
+              x: rockCol * GRID_SIZE,
+              y: y,
+              gridX: rockCol,
+              gridY: row.y,
+              width: GRID_SIZE,
+              height: GRID_SIZE,
+              speed: 0,
+              safe: false,
+              decorative: true
+            });
+          }
+        }
+      } else {
+        // Other obstacle types (fish, turtle, crocodile)
+        const numObstacles = Math.ceil(GRID_COLS / (row.spacing || 4)) + 1;
+        for (let i = 0; i < numObstacles; i++) {
+          const startX = i * (row.spacing || 4) * GRID_SIZE;
+          newObstacles.push({
+            id: `${row.type}_${row.y}_${i}`,
+            type: row.type,
+            x: startX,
+            y: y,
+            width: GRID_SIZE,
+            height: GRID_SIZE,
+            speed: row.speed || 1,
+            safe: false
+          });
+        }
       }
     });
 
