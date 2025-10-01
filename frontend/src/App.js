@@ -181,7 +181,7 @@ function App() {
 
               {/* User Stats Summary (if authenticated) */}
               {userStats && (
-                <div className="bg-gradient-to-br from-blue-900/50 to-indigo-800/50 backdrop-blur-lg rounded-2xl border border-blue-400/30 p-6 shadow-2xl">
+                <div className="rounded-2xl border border-white/20 p-6 shadow-2xl" style={{background: 'linear-gradient(135deg, rgba(6, 147, 227, 0.9) 0%, rgba(155, 81, 224, 0.7) 100%)', backdropFilter: 'blur(20px)'}}>
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold text-blue-100">📊 Quick Stats</h3>
                     {isDemoMode && (
