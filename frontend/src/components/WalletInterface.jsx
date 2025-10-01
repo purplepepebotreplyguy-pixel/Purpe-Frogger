@@ -158,7 +158,7 @@ export const WalletInterface = ({ onWalletReady, tokenBalance, setTokenBalance }
   }, [authToken, publicKey]);
 
   return (
-    <div className="wallet-interface bg-gradient-to-br from-emerald-900/80 to-teal-800/80 backdrop-blur-lg rounded-2xl border border-emerald-400/30 p-6 shadow-2xl">
+    <div className="wallet-interface rounded-2xl border border-white/20 p-6 shadow-2xl" style={{background: 'linear-gradient(135deg, rgba(0, 208, 130, 0.9) 0%, rgba(122, 220, 180, 0.7) 100%)', backdropFilter: 'blur(20px)'}}>
       <div className="flex flex-col items-center space-y-4">
         {/* Wallet Connection */}
         <div className="flex flex-col items-center space-y-3">
