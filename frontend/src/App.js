@@ -198,13 +198,13 @@ function App() {
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-blue-200">SOL Earned Today:</span>
-                      <span className="text-green-400 font-bold">{userStats.total_amount_today.toFixed(6)}</span>
+                      <span className="text-blue-200">PURPE Earned Today:</span>
+                      <span className="text-green-400 font-bold">{userStats.total_amount_today.toFixed(2)} PURPE</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-blue-200">Daily Limit:</span>
                       <span className="text-yellow-400 font-bold">
-                        {isDemoMode ? '0.05' : '0.1'} SOL
+                        {isDemoMode ? '0' : '10'} PURPE
                       </span>
                     </div>
                     <div className="flex justify-between">
