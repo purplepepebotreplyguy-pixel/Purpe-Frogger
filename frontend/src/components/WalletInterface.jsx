@@ -162,7 +162,7 @@ export const WalletInterface = ({ onWalletReady, tokenBalance, setTokenBalance }
       <div className="flex flex-col items-center space-y-4">
         {/* Wallet Connection */}
         <div className="flex flex-col items-center space-y-3">
-          <h3 className="text-xl font-bold text-emerald-100 mb-2">
+          <h3 className="text-xl font-bold mb-2" style={{color: '#ffffff'}}>
             Connect Your Solana Wallet
           </h3>
           <WalletMultiButton className="!bg-gradient-to-r !from-emerald-500 !to-teal-500 hover:!from-emerald-600 hover:!to-teal-600 !border-none !rounded-xl !px-6 !py-3 !text-white !font-semibold !transition-all !duration-300 !shadow-lg hover:!shadow-emerald-500/50" />
