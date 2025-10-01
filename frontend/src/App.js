@@ -212,8 +212,8 @@ function App() {
                       <span className="text-yellow-400 font-bold">{userStats.total_rewards_count}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-blue-200">Total SOL:</span>
-                      <span className="text-green-400 font-bold">{userStats.total_rewards_earned.toFixed(6)}</span>
+                      <span className="text-blue-200">Total PURPE:</span>
+                      <span className="text-green-400 font-bold">{userStats.total_rewards_earned.toFixed(2)} PURPE</span>
                     </div>
                   </div>
                 </div>
