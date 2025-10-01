@@ -353,38 +353,43 @@ export const GamePage = () => {
     }
   }, [gameState, frogPosition]);
 
-  // Handle frog movement with throttling
+  // Handle frog movement with grid-based positioning
   const moveFrog = useCallback((direction) => {
     const currentTime = Date.now();
-    if (currentTime - lastMoveTime < 150) return; // Throttle movement
+    if (currentTime - lastMoveTime < 200) return; // Slightly slower for 8-bit feel
     
     setLastMoveTime(currentTime);
     
     setFrogPosition(prev => {
-      let newX = prev.x;
-      let newY = prev.y;
+      let newGridX = prev.gridX;
+      let newGridY = prev.gridY;
 
       switch (direction) {
         case 'left':
-          newX = Math.max(0, prev.x - GRID_SIZE);
+          newGridX = Math.max(0, prev.gridX - 1);
           break;
         case 'right':
-          newX = Math.min(GAME_WIDTH - FROG_SIZE, prev.x + GRID_SIZE);
+          newGridX = Math.min(GRID_COLS - 1, prev.gridX + 1);
           break;
         case 'up':
-          newY = Math.max(0, prev.y - GRID_SIZE);
-          if (newY < prev.y) {
+          newGridY = Math.max(1, prev.gridY - 1);
+          if (newGridY < prev.gridY) {
             setScore(s => s + 10); // Score for moving forward
           }
           break;
         case 'down':
-          newY = Math.min(GAME_HEIGHT - FROG_SIZE, prev.y + GRID_SIZE);
+          newGridY = Math.min(GRID_ROWS - 2, prev.gridY + 1);
           break;
         default:
           return prev;
       }
 
-      return { x: newX, y: newY };
+      return { 
+        x: newGridX * GRID_SIZE + 2, 
+        y: newGridY * GRID_SIZE + 2,
+        gridX: newGridX,
+        gridY: newGridY
+      };
     });
   }, [lastMoveTime]);
 
