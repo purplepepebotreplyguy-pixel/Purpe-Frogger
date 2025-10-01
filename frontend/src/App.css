@@ -12,9 +12,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #1e1b4b 0%, #581c87 50%, #be185d 100%);
+  background: linear-gradient(135deg, rgb(2, 3, 129) 0%, rgb(40, 116, 252) 50%, rgb(155, 81, 224) 100%);
   min-height: 100vh;
-  color: #f8fafc;
+  color: #ffffff;
   overflow-x: hidden;
 }
 
