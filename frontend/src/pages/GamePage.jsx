@@ -442,60 +442,131 @@ export const GamePage = () => {
     return () => clearInterval(updateInterval);
   }, [gameState]);
 
-  // Collision detection
+  // Grid-based collision detection and water safety
   useEffect(() => {
     if (gameState !== 'playing') return;
 
     const checkCollisions = () => {
-      const frogRect = {
-        x: frogPosition.x,
-        y: frogPosition.y,
-        width: FROG_SIZE,
-        height: FROG_SIZE
-      };
-
-      // Check obstacle collisions
-      for (const obstacle of obstacles) {
-        if (
-          frogRect.x < obstacle.x + obstacle.width &&
-          frogRect.x + frogRect.width > obstacle.x &&
-          frogRect.y < obstacle.y + obstacle.height &&
-          frogRect.y + frogRect.height > obstacle.y
-        ) {
-          // Different behavior for different obstacle types
-          if (['lily_pad', 'log'].includes(obstacle.type)) {
-            // Safe obstacles - frog moves with them
-            setFrogPosition(prev => ({
-              ...prev,
-              x: Math.max(0, Math.min(GAME_WIDTH - FROG_SIZE, prev.x + obstacle.speed))
-            }));
-          } else {
-            // Dangerous obstacles - lose life
-            setLives(prev => {
-              const newLives = prev - 1;
-              if (newLives <= 0) {
-                setGameState('game_over');
-                completeGameSession(score, currentLevel - 1);
-              }
-              return newLives;
-            });
+      const frogGridX = frogPosition.gridX;
+      const frogGridY = frogPosition.gridY;
+      
+      // Check if frog is in water without a platform
+      const levelConfig = LEVELS[currentLevel];
+      const currentRow = levelConfig?.rows?.find(row => row.y === frogGridY);
+      
+      let isOnSafePlatform = false;
+      let platformSpeed = 0;
+      
+      if (currentRow?.type === 'safe') {
+        isOnSafePlatform = true;
+      } else {
+        // Check if frog is on any obstacle
+        for (const obstacle of obstacles) {
+          const obstacleGridX = Math.floor(obstacle.x / GRID_SIZE);
+          const obstacleGridY = Math.floor(obstacle.y / GRID_SIZE);
+          const obstacleWidth = Math.ceil(obstacle.width / GRID_SIZE);
+          
+          if (obstacleGridY === frogGridY && 
+              frogGridX >= obstacleGridX && 
+              frogGridX < obstacleGridX + obstacleWidth) {
             
-            // Reset frog position
-            setFrogPosition({ x: GAME_WIDTH / 2 - FROG_SIZE / 2, y: GAME_HEIGHT - 80 });
-            return;
+            if (obstacle.safe) {
+              isOnSafePlatform = true;
+              platformSpeed = obstacle.speed || 0;
+              break;
+            } else if (!obstacle.decorative) {
+              // Hit a dangerous obstacle
+              setLives(prev => {
+                const newLives = prev - 1;
+                if (newLives <= 0) {
+                  setGameState('game_over');
+                  completeGameSession(score, currentLevel - 1);
+                }
+                return newLives;
+              });
+              
+              // Reset frog position
+              const startGridX = Math.floor(GRID_COLS / 2);
+              const startGridY = GRID_ROWS - 2;
+              setFrogPosition({ 
+                x: startGridX * GRID_SIZE + 2, 
+                y: startGridY * GRID_SIZE + 2,
+                gridX: startGridX,
+                gridY: startGridY
+              });
+              return;
+            }
           }
         }
       }
+      
+      // If in water without platform, frog drowns
+      if (!isOnSafePlatform && currentRow?.type !== 'safe') {
+        setLives(prev => {
+          const newLives = prev - 1;
+          if (newLives <= 0) {
+            setGameState('game_over');
+            completeGameSession(score, currentLevel - 1);
+          }
+          return newLives;
+        });
+        
+        // Reset frog position
+        const startGridX = Math.floor(GRID_COLS / 2);
+        const startGridY = GRID_ROWS - 2;
+        setFrogPosition({ 
+          x: startGridX * GRID_SIZE + 2, 
+          y: startGridY * GRID_SIZE + 2,
+          gridX: startGridX,
+          gridY: startGridY
+        });
+        return;
+      }
+      
+      // Move frog with moving platform
+      if (isOnSafePlatform && platformSpeed !== 0) {
+        setFrogPosition(prev => {
+          const newX = prev.x + platformSpeed;
+          const newGridX = Math.floor(newX / GRID_SIZE);
+          
+          // Don't let frog go off screen
+          if (newGridX < 0 || newGridX >= GRID_COLS) {
+            // Frog falls off moving platform
+            const startGridX = Math.floor(GRID_COLS / 2);
+            const startGridY = GRID_ROWS - 2;
+            setLives(prevLives => Math.max(0, prevLives - 1));
+            return { 
+              x: startGridX * GRID_SIZE + 2, 
+              y: startGridY * GRID_SIZE + 2,
+              gridX: startGridX,
+              gridY: startGridY
+            };
+          }
+          
+          return {
+            ...prev,
+            x: newX,
+            gridX: newGridX
+          };
+        });
+      }
 
-      // Check if level completed (reached top)
-      if (frogPosition.y <= 50) {
-        const timeBonus = Math.max(0, 5000 - (Date.now() - levelStartTime));
+      // Check if level completed (reached top safe zone)
+      if (frogGridY <= 1) {
+        const timeBonus = Math.max(0, 1000 - Math.floor((Date.now() - levelStartTime) / 1000) * 10);
         setScore(s => s + 1000 + timeBonus);
 
         if (currentLevel < Object.keys(LEVELS).length) {
           // Next level
           setCurrentLevel(prev => prev + 1);
-          setFrogPosition({ x: GAME_WIDTH / 2 - FROG_SIZE / 2, y: GAME_HEIGHT - 80 });
+          const startGridX = Math.floor(GRID_COLS / 2);
+          const startGridY = GRID_ROWS - 2;
+          setFrogPosition({ 
+            x: startGridX * GRID_SIZE + 2, 
+            y: startGridY * GRID_SIZE + 2,
+            gridX: startGridX,
+            gridY: startGridY
+          });
           setObstacles(initializeLevel(currentLevel + 1));
           setLevelStartTime(Date.now());
           setGameState('level_complete');
@@ -508,9 +579,9 @@ export const GamePage = () => {
       }
     };
 
-    const collisionInterval = setInterval(checkCollisions, 50);
+    const collisionInterval = setInterval(checkCollisions, 100);
     return () => clearInterval(collisionInterval);
-  }, [gameState, frogPosition, obstacles, currentLevel, score, levelStartTime, sessionId, authToken]);
+  }, [gameState, frogPosition, obstacles, currentLevel, score, levelStartTime, sessionId, authToken, completeGameSession, initializeLevel]);
 
   // 8-bit pixel art drawing functions
   const draw8BitPixel = (ctx, x, y, color, size = 4) => {
