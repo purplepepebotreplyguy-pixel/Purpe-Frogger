@@ -21,6 +21,15 @@ module.exports = {
         buffer: require.resolve('buffer'),
         process: require.resolve('process/browser'),
         'process/browser': require.resolve('process/browser'),
+        fs: false,
+        net: false,
+        tls: false,
+      };
+
+      // Handle module resolution issues
+      webpackConfig.resolve.extensionAlias = {
+        '.js': ['.js', '.ts', '.tsx'],
+        '.mjs': ['.mjs', '.js'],
       };
 
       // Add buffer plugin
