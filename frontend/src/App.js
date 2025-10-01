@@ -113,7 +113,7 @@ function App() {
         <main className="container mx-auto px-6 pb-12">
           {/* Navigation Tabs */}
           <div className="flex justify-center mb-8">
-            <div className="bg-black/40 backdrop-blur-lg rounded-2xl p-2 border border-purple-400/30">
+            <div style={{background: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(20px)'}} className="rounded-2xl p-2 border border-white/20">
               <div className="flex space-x-2">
                 {[
                   { id: 'game', label: '🎮 Game', icon: '🎮' },
@@ -125,9 +125,10 @@ function App() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
                       activeTab === tab.id
-                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
-                        : 'text-purple-300 hover:text-white hover:bg-white/10'
+                        ? 'text-white shadow-lg'
+                        : 'text-white/70 hover:text-white hover:bg-white/10'
                     }`}
+                    style={activeTab === tab.id ? {background: 'linear-gradient(135deg, #0693e3 0%, #9b51e0 100%)'} : {}}
                     data-testid={`${tab.id}-tab`}
                   >
                     <span className="hidden sm:inline">{tab.label}</span>
