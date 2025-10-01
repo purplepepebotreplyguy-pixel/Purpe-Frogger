@@ -88,22 +88,22 @@ function App() {
 
             {/* Game Features */}
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
-              <div className="bg-black/30 backdrop-blur-lg rounded-xl p-6 border border-emerald-400/30">
+              <div style={{background: 'linear-gradient(135deg, rgba(0, 208, 130, 0.9) 0%, rgba(122, 220, 180, 0.9) 100%)', backdropFilter: 'blur(15px)'}} className="rounded-xl p-6 border border-white/20 shadow-xl">
                 <div className="text-4xl mb-3">🎮</div>
-                <h3 className="text-lg font-semibold text-emerald-300 mb-2">Classic Gameplay</h3>
-                <p className="text-emerald-200 text-sm">Navigate through themed levels with retro Frogger-style mechanics</p>
+                <h3 className="text-lg font-semibold mb-2" style={{color: '#ffffff'}}>Classic Gameplay</h3>
+                <p className="text-sm" style={{color: '#ffffff'}}>Navigate through themed levels with retro Frogger-style mechanics</p>
               </div>
               
-              <div className="bg-black/30 backdrop-blur-lg rounded-xl p-6 border border-purple-400/30">
+              <div style={{background: 'linear-gradient(135deg, rgba(6, 147, 227, 0.9) 0%, rgba(155, 81, 224, 0.9) 100%)', backdropFilter: 'blur(15px)'}} className="rounded-xl p-6 border border-white/20 shadow-xl">
                 <div className="text-4xl mb-3">💎</div>
-                <h3 className="text-lg font-semibold text-purple-300 mb-2">Earn SOL Rewards</h3>
-                <p className="text-purple-200 text-sm">Complete levels and claim daily bonuses to earn real Solana tokens</p>
+                <h3 className="text-lg font-semibold mb-2" style={{color: '#ffffff'}}>Earn SOL Rewards</h3>
+                <p className="text-sm" style={{color: '#ffffff'}}>Complete levels and claim daily bonuses to earn real Solana tokens</p>
               </div>
               
-              <div className="bg-black/30 backdrop-blur-lg rounded-xl p-6 border border-pink-400/30">
+              <div style={{background: 'linear-gradient(135deg, rgba(252, 185, 0, 0.9) 0%, rgba(255, 105, 0, 0.9) 100%)', backdropFilter: 'blur(15px)'}} className="rounded-xl p-6 border border-white/20 shadow-xl">
                 <div className="text-4xl mb-3">🏆</div>
-                <h3 className="text-lg font-semibold text-pink-300 mb-2">Compete & Win</h3>
-                <p className="text-pink-200 text-sm">Climb the leaderboard and show off your Frogger skills to the world</p>
+                <h3 className="text-lg font-semibold mb-2" style={{color: '#ffffff'}}>Compete & Win</h3>
+                <p className="text-sm" style={{color: '#ffffff'}}>Climb the leaderboard and show off your Frogger skills to the world</p>
               </div>
             </div>
           </div>
