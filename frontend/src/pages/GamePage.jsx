@@ -319,43 +319,6 @@ export const GamePage = () => {
     };
   }, []);
 
-  // Handle mouse clicks on canvas - grid-based movement
-  useEffect(() => {
-    const handleCanvasClick = (e) => {
-      if (gameState !== 'playing') return;
-      
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      // Scale coordinates to game size and convert to grid
-      const gameX = (x / rect.width) * GAME_WIDTH;
-      const gameY = (y / rect.height) * GAME_HEIGHT;
-      const clickGridX = Math.floor(gameX / GRID_SIZE);
-      const clickGridY = Math.floor(gameY / GRID_SIZE);
-      
-      // Calculate movement direction based on grid position
-      const dx = clickGridX - frogPosition.gridX;
-      const dy = clickGridY - frogPosition.gridY;
-      
-      // Move one step in the direction of the click
-      if (Math.abs(dx) > Math.abs(dy)) {
-        moveFrog(dx > 0 ? 'right' : 'left');
-      } else {
-        moveFrog(dy > 0 ? 'down' : 'up');
-      }
-    };
-
-    const canvas = canvasRef.current;
-    if (canvas) {
-      canvas.addEventListener('click', handleCanvasClick);
-      return () => canvas.removeEventListener('click', handleCanvasClick);
-    }
-  }, [gameState, frogPosition, moveFrog]);
-
   // Handle frog movement with grid-based positioning
   const moveFrog = useCallback((direction) => {
     if (gameState !== 'playing') return;
@@ -397,6 +360,43 @@ export const GamePage = () => {
       };
     });
   }, [gameState, lastMoveTime]);
+
+  // Handle mouse clicks on canvas - grid-based movement
+  useEffect(() => {
+    const handleCanvasClick = (e) => {
+      if (gameState !== 'playing') return;
+      
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Scale coordinates to game size and convert to grid
+      const gameX = (x / rect.width) * GAME_WIDTH;
+      const gameY = (y / rect.height) * GAME_HEIGHT;
+      const clickGridX = Math.floor(gameX / GRID_SIZE);
+      const clickGridY = Math.floor(gameY / GRID_SIZE);
+      
+      // Calculate movement direction based on grid position
+      const dx = clickGridX - (frogPosition.gridX || Math.floor(frogPosition.x / GRID_SIZE));
+      const dy = clickGridY - (frogPosition.gridY || Math.floor(frogPosition.y / GRID_SIZE));
+      
+      // Move one step in the direction of the click
+      if (Math.abs(dx) > Math.abs(dy)) {
+        moveFrog(dx > 0 ? 'right' : 'left');
+      } else {
+        moveFrog(dy > 0 ? 'down' : 'up');
+      }
+    };
+
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.addEventListener('click', handleCanvasClick);
+      return () => canvas.removeEventListener('click', handleCanvasClick);
+    }
+  }, [gameState, frogPosition, moveFrog]);
 
   // Handle keyboard movement
   useEffect(() => {
