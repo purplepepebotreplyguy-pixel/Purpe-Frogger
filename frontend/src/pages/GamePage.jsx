@@ -319,7 +319,7 @@ export const GamePage = () => {
     };
   }, []);
 
-  // Handle mouse clicks on canvas
+  // Handle mouse clicks on canvas - grid-based movement
   useEffect(() => {
     const handleCanvasClick = (e) => {
       if (gameState !== 'playing') return;
@@ -331,19 +331,22 @@ export const GamePage = () => {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
-      // Scale coordinates to game size
+      // Scale coordinates to game size and convert to grid
       const gameX = (x / rect.width) * GAME_WIDTH;
       const gameY = (y / rect.height) * GAME_HEIGHT;
+      const clickGridX = Math.floor(gameX / GRID_SIZE);
+      const clickGridY = Math.floor(gameY / GRID_SIZE);
       
-      // Calculate movement direction based on click position relative to frog
-      const frogCenterX = frogPosition.x + FROG_SIZE / 2;
-      const frogCenterY = frogPosition.y + FROG_SIZE / 2;
+      // Calculate movement direction based on grid position
+      const dx = clickGridX - frogPosition.gridX;
+      const dy = clickGridY - frogPosition.gridY;
       
-      const dx = gameX - frogCenterX;
-      const dy = gameY - frogCenterY;
-      
-      // Move frog in direction of click
-      moveFrog(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
+      // Move one step in the direction of the click
+      if (Math.abs(dx) > Math.abs(dy)) {
+        moveFrog(dx > 0 ? 'right' : 'left');
+      } else {
+        moveFrog(dy > 0 ? 'down' : 'up');
+      }
     };
 
     const canvas = canvasRef.current;
@@ -351,7 +354,7 @@ export const GamePage = () => {
       canvas.addEventListener('click', handleCanvasClick);
       return () => canvas.removeEventListener('click', handleCanvasClick);
     }
-  }, [gameState, frogPosition]);
+  }, [gameState, frogPosition, moveFrog]);
 
   // Handle frog movement with grid-based positioning
   const moveFrog = useCallback((direction) => {
