@@ -33,29 +33,46 @@ const COLORS = {
   text: '#FFFFFF' // White text
 };
 
-// Level configurations
+// Level configurations - 8-bit style
 const LEVELS = {
   1: {
-    name: "Lilly Pad Lagoon",
+    name: "Lily Pads",
     theme: "pond",
-    background: "#2563eb",
-    obstacles: [
-      { type: "lily_pad", y: 200, speed: 1, width: 60, spacing: 120 },
-      { type: "dragonfly", y: 160, speed: 2, width: 40, spacing: 180 },
-      { type: "log", y: 240, speed: -1.5, width: 100, spacing: 200 },
-      { type: "lily_pad", y: 280, speed: 0.8, width: 60, spacing: 140 }
+    backgroundColor: COLORS.water,
+    rows: [
+      { type: "safe", y: 1, color: COLORS.grass }, // Top safe zone (goal)
+      { type: "rocks", y: 2, speed: 0, spacing: 4 }, // Decorative rocks
+      { type: "water", y: 3 },
+      { type: "lily_pad", y: 4, speed: 0, spacing: 3, offset: 0 }, // Stationary lily pads
+      { type: "water", y: 5 },
+      { type: "lily_pad", y: 6, speed: 0, spacing: 4, offset: 1 }, // Offset lily pads
+      { type: "water", y: 7 },
+      { type: "log", y: 8, speed: 1, length: 3, spacing: 6, offset: 0 }, // Moving logs
+      { type: "water", y: 9 },
+      { type: "lily_pad", y: 10, speed: 0, spacing: 2, offset: 0 }, // Dense lily pads
+      { type: "water", y: 11 },
+      { type: "log", y: 12, speed: -1, length: 4, spacing: 7, offset: 2 }, // Opposite direction logs
+      { type: "water", y: 13 },
+      { type: "lily_pad", y: 14, speed: 0, spacing: 3, offset: 2 }, // More lily pads
+      { type: "water", y: 15 },
+      { type: "water", y: 16 },
+      { type: "safe", y: 17, color: COLORS.grass }, // Bottom safe zone (start)
     ]
   },
   2: {
     name: "Perilous Pond",
     theme: "deep_water",
-    background: "#1e3a8a",
-    obstacles: [
-      { type: "fish", y: 180, speed: 2.5, width: 50, spacing: 160 },
-      { type: "turtle", y: 220, speed: -1.8, width: 70, spacing: 200 },
-      { type: "crocodile", y: 260, speed: 3, width: 80, spacing: 220 },
-      { type: "log", y: 300, speed: -2, width: 120, spacing: 180 },
-      { type: "fish", y: 340, speed: 2.8, width: 50, spacing: 140 }
+    backgroundColor: COLORS.water,
+    rows: [
+      { type: "safe", y: 1, color: COLORS.grass },
+      { type: "crocodile", y: 3, speed: 2, spacing: 5 },
+      { type: "log", y: 5, speed: -1.5, length: 3, spacing: 6 },
+      { type: "turtle", y: 7, speed: 1.2, spacing: 4 },
+      { type: "log", y: 9, speed: 2, length: 4, spacing: 8 },
+      { type: "fish", y: 11, speed: -2.5, spacing: 3 },
+      { type: "lily_pad", y: 13, speed: 0, spacing: 5 },
+      { type: "log", y: 15, speed: 1.8, length: 2, spacing: 7 },
+      { type: "safe", y: 17, color: COLORS.grass }
     ]
   }
 };
