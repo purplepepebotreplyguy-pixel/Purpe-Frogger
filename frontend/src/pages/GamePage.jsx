@@ -560,17 +560,20 @@ export const GamePage = () => {
 
         if (currentLevel < Object.keys(LEVELS).length) {
           // Next level
-          setCurrentLevel(prev => prev + 1);
-          const startGridX = Math.floor(GRID_COLS / 2);
-          const startGridY = GRID_ROWS - 2;
-          setFrogPosition({ 
-            x: startGridX * GRID_SIZE + 2, 
-            y: startGridY * GRID_SIZE + 2,
-            gridX: startGridX,
-            gridY: startGridY
+          setCurrentLevel(prev => {
+            const nextLevel = prev + 1;
+            const startGridX = Math.floor(GRID_COLS / 2);
+            const startGridY = GRID_ROWS - 2;
+            setFrogPosition({ 
+              x: startGridX * GRID_SIZE + 2, 
+              y: startGridY * GRID_SIZE + 2,
+              gridX: startGridX,
+              gridY: startGridY
+            });
+            setObstacles(initializeLevel(nextLevel));
+            setLevelStartTime(Date.now());
+            return nextLevel;
           });
-          setObstacles(initializeLevel(currentLevel + 1));
-          setLevelStartTime(Date.now());
           setGameState('level_complete');
           setTimeout(() => setGameState('playing'), 2000);
         } else {
