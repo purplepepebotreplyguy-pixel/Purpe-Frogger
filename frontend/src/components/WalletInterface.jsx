@@ -186,7 +186,7 @@ export const WalletInterface = ({ onWalletReady, tokenBalance, setTokenBalance }
                 '🎮 Try Demo Mode (No Wallet Required)'
               )}
             </button>
-            <p className="text-emerald-300 text-xs mt-2">
+            <p className="text-white text-xs mt-2">
               Play without PURPE tokens • Reduced rewards
             </p>
           </div>
