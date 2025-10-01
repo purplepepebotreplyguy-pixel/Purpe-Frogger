@@ -447,12 +447,13 @@ async def get_token_balance(wallet_address: str):
         raise HTTPException(status_code=500, detail="Failed to get token balance")
 
 @app.get("/api/rewards/eligibility")
-async def get_reward_eligibility(current_user: dict = Depends(get_current_user)):
+async def get_reward_eligibility(request: Request, current_user: dict = Depends(get_current_user)):
     """Check reward eligibility for authenticated user"""
     try:
         wallet_address = current_user["wallet_address"]
         demo_mode = current_user.get("demo_mode", False)
-        eligibility = await check_reward_eligibility(wallet_address, demo_mode)
+        client_ip = get_client_ip(request)
+        eligibility = await check_reward_eligibility(wallet_address, demo_mode, client_ip)
         
         return {
             "success": True,
