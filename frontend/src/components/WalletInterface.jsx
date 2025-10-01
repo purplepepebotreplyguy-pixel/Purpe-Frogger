@@ -131,6 +131,29 @@ export const WalletInterface = ({ onWalletReady, tokenBalance, setTokenBalance }
             Connect Your Solana Wallet
           </h3>
           <WalletMultiButton className="!bg-gradient-to-r !from-emerald-500 !to-teal-500 hover:!from-emerald-600 hover:!to-teal-600 !border-none !rounded-xl !px-6 !py-3 !text-white !font-semibold !transition-all !duration-300 !shadow-lg hover:!shadow-emerald-500/50" />
+          
+          {/* Demo Mode Button */}
+          <div className="text-center">
+            <div className="text-emerald-200 text-sm mb-2">or</div>
+            <button
+              onClick={authenticateDemoMode}
+              disabled={authenticating}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              data-testid="demo-mode-btn"
+            >
+              {authenticating ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                  Starting Demo...
+                </div>
+              ) : (
+                '🎮 Try Demo Mode (No Wallet Required)'
+              )}
+            </button>
+            <p className="text-emerald-300 text-xs mt-2">
+              Play without PURPE tokens • Reduced rewards
+            </p>
+          </div>
         </div>
 
         {/* Wallet Info */}
