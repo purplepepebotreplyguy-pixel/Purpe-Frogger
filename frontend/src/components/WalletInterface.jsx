@@ -165,7 +165,7 @@ export const WalletInterface = ({ onWalletReady, tokenBalance, setTokenBalance }
           <h3 className="text-xl font-bold mb-2" style={{color: '#ffffff'}}>
             Connect Your Solana Wallet
           </h3>
-          <WalletMultiButton className="!bg-gradient-to-r !from-emerald-500 !to-teal-500 hover:!from-emerald-600 hover:!to-teal-600 !border-none !rounded-xl !px-6 !py-3 !text-white !font-semibold !transition-all !duration-300 !shadow-lg hover:!shadow-emerald-500/50" />
+          <WalletMultiButton className="!border-none !rounded-xl !px-6 !py-3 !text-white !font-semibold !transition-all !duration-300 !shadow-lg" style={{background: 'linear-gradient(135deg, #0693e3 0%, #9b51e0 100%)'}} />
           
           {/* Demo Mode Button */}
           <div className="text-center">
