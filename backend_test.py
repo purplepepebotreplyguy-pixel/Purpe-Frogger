@@ -97,8 +97,8 @@ class PurpeLeapAPITester:
 
     def test_auth_challenge(self):
         """Test authentication challenge creation"""
-        # Use a valid Solana wallet address format
-        test_wallet = "11111111111111111111111111111112"  # Valid base58 address
+        # Use a valid Solana wallet address format (44 characters base58)
+        test_wallet = "11111111111111111111111111111111111111111111"  # Valid 44-char base58 address
         
         success, response = self.run_test(
             "Create Auth Challenge",
