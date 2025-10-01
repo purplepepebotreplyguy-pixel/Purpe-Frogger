@@ -244,12 +244,20 @@ export const GamePage = () => {
     }
   };
 
-  // Initialize game state
+  // Initialize game state - 8-bit grid positioning
   const initializeGame = () => {
     setCurrentLevel(1);
     setScore(0);
     setLives(3);
-    setFrogPosition({ x: GAME_WIDTH / 2 - FROG_SIZE / 2, y: GAME_HEIGHT - 80 });
+    // Start frog in center of bottom safe zone
+    const startGridX = Math.floor(GRID_COLS / 2);
+    const startGridY = GRID_ROWS - 2; // Second to last row (safe zone)
+    setFrogPosition({ 
+      x: startGridX * GRID_SIZE + 2, 
+      y: startGridY * GRID_SIZE + 2,
+      gridX: startGridX,
+      gridY: startGridY
+    });
     setObstacles(initializeLevel(1));
     setLevelStartTime(Date.now());
     setGameState('playing');
