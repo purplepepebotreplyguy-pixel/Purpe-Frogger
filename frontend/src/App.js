@@ -166,15 +166,30 @@ function App() {
               {/* User Stats Summary (if authenticated) */}
               {userStats && (
                 <div className="bg-gradient-to-br from-blue-900/50 to-indigo-800/50 backdrop-blur-lg rounded-2xl border border-blue-400/30 p-6 shadow-2xl">
-                  <h3 className="text-xl font-bold text-blue-100 mb-4">📊 Quick Stats</h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold text-blue-100">📊 Quick Stats</h3>
+                    {isDemoMode && (
+                      <span className="bg-purple-600/50 text-purple-200 px-2 py-1 rounded-full text-xs font-semibold">
+                        DEMO
+                      </span>
+                    )}
+                  </div>
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-blue-200">Today's Rewards:</span>
-                      <span className="text-blue-100 font-bold">{userStats.daily_rewards_claimed}/10</span>
+                      <span className="text-blue-100 font-bold">
+                        {userStats.daily_rewards_claimed}/{isDemoMode ? '10' : '10'}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-blue-200">SOL Earned Today:</span>
                       <span className="text-green-400 font-bold">{userStats.total_amount_today.toFixed(6)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-blue-200">Daily Limit:</span>
+                      <span className="text-yellow-400 font-bold">
+                        {isDemoMode ? '0.05' : '0.1'} SOL
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-blue-200">Total Rewards:</span>
