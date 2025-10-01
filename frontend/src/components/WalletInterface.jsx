@@ -75,6 +75,7 @@ export const WalletInterface = ({ onWalletReady, tokenBalance, setTokenBalance }
         const token = verifyResponse.data.access_token;
         setAuthToken(token);
         localStorage.setItem('auth_token', token);
+        localStorage.setItem('demo_mode', 'false');
         
         // Recheck balance with authentication
         checkPurpeBalance();
@@ -85,6 +86,40 @@ export const WalletInterface = ({ onWalletReady, tokenBalance, setTokenBalance }
     } catch (error) {
       console.error('Authentication error:', error);
       alert('Authentication failed: ' + error.message);
+    } finally {
+      setAuthenticating(false);
+    }
+  };
+
+  // Authenticate in demo mode
+  const authenticateDemoMode = async () => {
+    setAuthenticating(true);
+    try {
+      const response = await axios.post(`${API}/auth/demo`);
+
+      if (response.data.success) {
+        const token = response.data.access_token;
+        setAuthToken(token);
+        localStorage.setItem('auth_token', token);
+        localStorage.setItem('demo_mode', 'true');
+        
+        // Set demo token balance
+        setTokenBalance({
+          balance: 0,
+          usd_value: 0,
+          has_minimum_balance: true, // Demo mode bypasses balance requirement
+          account_exists: false,
+          token_price: 15.0
+        });
+        
+        onWalletReady(true);
+      } else {
+        throw new Error('Demo mode failed to initialize');
+      }
+
+    } catch (error) {
+      console.error('Demo authentication error:', error);
+      alert('Failed to start demo mode: ' + error.message);
     } finally {
       setAuthenticating(false);
     }
