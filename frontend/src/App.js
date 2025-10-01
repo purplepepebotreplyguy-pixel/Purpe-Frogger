@@ -254,8 +254,36 @@ function App() {
                 </div>
               </div>
 
+              {/* Character Showcase */}
+              <div className="bg-gradient-to-br from-indigo-900/50 to-purple-800/50 backdrop-blur-lg rounded-2xl border border-indigo-400/30 p-6 shadow-2xl">
+                <h3 className="text-xl font-bold text-indigo-100 mb-4">🐸 Meet Purpe</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_leap-game-1/artifacts/98rfagje_image.png"
+                      alt="Diamond Purpe"
+                      className="w-16 h-16 mx-auto rounded-full border-2 border-yellow-400/50 shadow-lg mb-2"
+                    />
+                    <h4 className="text-yellow-300 font-semibold text-sm">Diamond Purpe</h4>
+                    <p className="text-indigo-200 text-xs">The wealthy collector</p>
+                  </div>
+                  <div className="text-center">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_leap-game-1/artifacts/b0u4h0la_image.png"
+                      alt="Mystic Purpe"
+                      className="w-16 h-16 mx-auto rounded-full border-2 border-pink-400/50 shadow-lg mb-2"
+                    />
+                    <h4 className="text-pink-300 font-semibold text-sm">Mystic Purpe</h4>
+                    <p className="text-indigo-200 text-xs">The shape-shifter</p>
+                  </div>
+                </div>
+                <p className="text-indigo-200 text-xs mt-4 text-center">
+                  Choose your character style and leap through the Web3 waters!
+                </p>
+              </div>
+
               {/* PURPE Token Info */}
-              {!tokenBalance?.has_minimum_balance && (
+              {!tokenBalance?.has_minimum_balance && !isDemoMode && (
                 <div className="bg-gradient-to-br from-purple-900/50 to-violet-800/50 backdrop-blur-lg rounded-2xl border border-purple-400/30 p-6 shadow-2xl">
                   <h3 className="text-xl font-bold text-purple-100 mb-4">💰 Get PURPE Tokens</h3>
                   <p className="text-purple-200 text-sm mb-4">
@@ -273,6 +301,36 @@ function App() {
                     <div className="text-xs text-purple-300 text-center">
                       Contract: {process.env.REACT_APP_PURPE_MINT || 'HBoNJ5v8g71s2boRivrHnfSB5MVPLDHHyVjruPfhGkvL'}
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Demo Mode Info */}
+              {isDemoMode && (
+                <div className="bg-gradient-to-br from-purple-900/50 to-pink-800/50 backdrop-blur-lg rounded-2xl border border-purple-400/30 p-6 shadow-2xl">
+                  <h3 className="text-xl font-bold text-purple-100 mb-4">🎮 Demo Mode Active</h3>
+                  <div className="space-y-2 text-sm text-purple-200">
+                    <div className="flex items-center">
+                      <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                      <span>No PURPE tokens required</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="w-2 h-2 bg-yellow-400 rounded-full mr-2"></span>
+                      <span>0.05 SOL daily limit</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                      <span>1 minute reward cooldown</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
+                      <span>Full game access</span>
+                    </div>
+                  </div>
+                  <div className="mt-4 p-3 bg-purple-600/30 rounded-lg">
+                    <p className="text-purple-100 text-xs text-center">
+                      🎯 Perfect for testing gameplay mechanics!
+                    </p>
                   </div>
                 </div>
               )}
