@@ -583,7 +583,7 @@ export const GamePage = () => {
 
     const collisionInterval = setInterval(checkCollisions, 100);
     return () => clearInterval(collisionInterval);
-  }, [gameState, frogPosition, obstacles, currentLevel, score, levelStartTime, sessionId, authToken, completeGameSession, initializeLevel]);
+  }, [gameState, frogPosition, obstacles, currentLevel, score, levelStartTime, sessionId, authToken]);
 
   // 8-bit pixel art drawing functions
   const draw8BitPixel = (ctx, x, y, color, size = 4) => {
