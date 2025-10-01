@@ -452,11 +452,13 @@ async def get_reward_eligibility(current_user: dict = Depends(get_current_user))
     """Check reward eligibility for authenticated user"""
     try:
         wallet_address = current_user["wallet_address"]
-        eligibility = await check_reward_eligibility(wallet_address)
+        demo_mode = current_user.get("demo_mode", False)
+        eligibility = await check_reward_eligibility(wallet_address, demo_mode)
         
         return {
             "success": True,
             "wallet_address": wallet_address,
+            "demo_mode": demo_mode,
             **eligibility
         }
         
