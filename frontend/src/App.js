@@ -46,6 +46,9 @@ function App() {
     setAuthToken(token);
   }, []);
 
+  // Check if in demo mode
+  const isDemoMode = localStorage.getItem('demo_mode') === 'true';
+
   return (
     <WalletContextProvider>
       <div className="App min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
