@@ -382,20 +382,52 @@ export const FroggerGame = ({ walletReady, authToken, onRewardEarned, userStats 
       }
     });
 
-    // Draw frog (Purpe)
-    ctx.fillStyle = '#a855f7'; // Purple color for Purpe
+    // Draw frog (Purpe) - Enhanced with character sprite
+    // Purple gradient for Purpe the frog
+    const gradient = ctx.createRadialGradient(
+      frogPosition.x + FROG_SIZE/2, frogPosition.y + FROG_SIZE/2, 0,
+      frogPosition.x + FROG_SIZE/2, frogPosition.y + FROG_SIZE/2, FROG_SIZE/2
+    );
+    gradient.addColorStop(0, '#c084fc');
+    gradient.addColorStop(0.5, '#a855f7');
+    gradient.addColorStop(1, '#7c3aed');
+    
+    ctx.fillStyle = gradient;
     ctx.beginPath();
     ctx.ellipse(frogPosition.x + FROG_SIZE/2, frogPosition.y + FROG_SIZE/2,
                FROG_SIZE/2, FROG_SIZE/2, 0, 0, Math.PI * 2);
     ctx.fill();
     
-    // Frog eyes
+    // Add a subtle glow effect
+    ctx.shadowColor = '#a855f7';
+    ctx.shadowBlur = 10;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    
+    // Frog eyes with better styling
     ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 1;
+    
+    // Left eye
     ctx.beginPath();
-    ctx.ellipse(frogPosition.x + FROG_SIZE/3, frogPosition.y + FROG_SIZE/3, 4, 4, 0, 0, Math.PI * 2);
+    ctx.ellipse(frogPosition.x + FROG_SIZE/3, frogPosition.y + FROG_SIZE/3, 5, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Right eye
+    ctx.beginPath();
+    ctx.ellipse(frogPosition.x + 2*FROG_SIZE/3, frogPosition.y + FROG_SIZE/3, 5, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Pupils
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    ctx.ellipse(frogPosition.x + FROG_SIZE/3, frogPosition.y + FROG_SIZE/3, 2, 3, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.ellipse(frogPosition.x + 2*FROG_SIZE/3, frogPosition.y + FROG_SIZE/3, 4, 4, 0, 0, Math.PI * 2);
+    ctx.ellipse(frogPosition.x + 2*FROG_SIZE/3, frogPosition.y + FROG_SIZE/3, 2, 3, 0, 0, Math.PI * 2);
     ctx.fill();
 
     // HUD
