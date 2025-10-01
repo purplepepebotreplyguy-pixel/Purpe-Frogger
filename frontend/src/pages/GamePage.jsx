@@ -512,168 +512,207 @@ export const GamePage = () => {
     return () => clearInterval(collisionInterval);
   }, [gameState, frogPosition, obstacles, currentLevel, score, levelStartTime, sessionId, authToken]);
 
-  // Render game
+  // 8-bit pixel art drawing functions
+  const draw8BitPixel = (ctx, x, y, color, size = 4) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, size, size);
+  };
+
+  const draw8BitSprite = (ctx, x, y, width, height, primaryColor, pattern = null) => {
+    ctx.imageSmoothingEnabled = false;
+    ctx.fillStyle = primaryColor;
+    ctx.fillRect(x, y, width, height);
+    
+    if (pattern) {
+      ctx.fillStyle = pattern.color;
+      switch (pattern.type) {
+        case 'crosshatch':
+          // Draw crosshatch pattern for lily pads
+          for (let i = 0; i < width; i += 8) {
+            ctx.fillRect(x + i, y, 2, height);
+          }
+          for (let i = 0; i < height; i += 8) {
+            ctx.fillRect(x, y + i, width, 2);
+          }
+          break;
+        case 'woodgrain':
+          // Draw wood grain for logs
+          for (let i = 0; i < height; i += 6) {
+            ctx.fillRect(x, y + i, width, 2);
+          }
+          for (let i = 0; i < width; i += 12) {
+            ctx.fillRect(x + i, y, 2, height);
+          }
+          break;
+        case 'scales':
+          // Draw scale pattern for creatures
+          for (let i = 0; i < width; i += 6) {
+            for (let j = 0; j < height; j += 6) {
+              ctx.fillRect(x + i, y + j, 2, 2);
+            }
+          }
+          break;
+      }
+    }
+  };
+
+  // Render game with 8-bit graphics
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false; // Keep pixels sharp
+    
     const render = () => {
       ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
       if (gameState === 'menu') {
-        // Menu screen
-        const gradient = ctx.createLinearGradient(0, 0, 0, GAME_HEIGHT);
-        gradient.addColorStop(0, '#4a5568');
-        gradient.addColorStop(1, '#1a202c');
-        ctx.fillStyle = gradient;
+        // 8-bit style menu screen
+        ctx.fillStyle = COLORS.water;
         ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 36px Inter';
+        // Draw grid background
+        ctx.strokeStyle = '#FFFFFF20';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= GRID_COLS; i++) {
+          ctx.beginPath();
+          ctx.moveTo(i * GRID_SIZE, 0);
+          ctx.lineTo(i * GRID_SIZE, GAME_HEIGHT);
+          ctx.stroke();
+        }
+        for (let i = 0; i <= GRID_ROWS; i++) {
+          ctx.beginPath();
+          ctx.moveTo(0, i * GRID_SIZE);
+          ctx.lineTo(GAME_WIDTH, i * GRID_SIZE);
+          ctx.stroke();
+        }
+        
+        ctx.fillStyle = COLORS.text;
+        ctx.font = 'bold 28px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText("Purpe's Leap", GAME_WIDTH / 2, 120);
+        ctx.fillText("LEVEL 1: LILY PADS", GAME_WIDTH / 2, 120);
         
-        ctx.font = '18px Inter';
-        ctx.fillText('Web3 Frogger on Solana', GAME_WIDTH / 2, 160);
+        ctx.font = '16px monospace';
+        ctx.fillText('8-BIT WEB3 FROGGER', GAME_WIDTH / 2, 150);
         
-        // Game preview frog
-        const previewGradient = ctx.createRadialGradient(
-          GAME_WIDTH / 2, 200, 0,
-          GAME_WIDTH / 2, 200, 20
-        );
-        previewGradient.addColorStop(0, '#c084fc');
-        previewGradient.addColorStop(1, '#7c3aed');
-        ctx.fillStyle = previewGradient;
-        ctx.beginPath();
-        ctx.ellipse(GAME_WIDTH / 2, 200, 20, 20, 0, 0, Math.PI * 2);
-        ctx.fill();
+        // Draw preview 8-bit frog
+        const previewX = GAME_WIDTH / 2 - GRID_SIZE / 2;
+        const previewY = 200;
+        draw8BitSprite(ctx, previewX, previewY, GRID_SIZE - 4, GRID_SIZE - 4, COLORS.frog);
+        
+        // Frog eyes
+        ctx.fillStyle = COLORS.frogEyes;
+        ctx.fillRect(previewX + 6, previewY + 6, 6, 6);
+        ctx.fillRect(previewX + 16, previewY + 6, 6, 6);
+        ctx.fillStyle = COLORS.frogPupils;
+        ctx.fillRect(previewX + 8, previewY + 8, 2, 2);
+        ctx.fillRect(previewX + 18, previewY + 8, 2, 2);
         
         if (walletReady) {
-          ctx.fillStyle = '#10b981';
-          ctx.font = '16px Inter';
-          ctx.fillText('✅ Ready to Play!', GAME_WIDTH / 2, 280);
-          ctx.fillText('Click buttons below or press SPACE', GAME_WIDTH / 2, 305);
+          ctx.fillStyle = '#00FF00';
+          ctx.font = '14px monospace';
+          ctx.fillText('READY TO PLAY!', GAME_WIDTH / 2, 280);
+          ctx.fillText('PRESS SPACE OR CLICK BUTTONS', GAME_WIDTH / 2, 300);
           
           const isDemoMode = localStorage.getItem('demo_mode') === 'true';
           if (isDemoMode) {
-            ctx.fillStyle = '#ff6900';
-            ctx.fillText('🎮 Demo Mode - No Rewards', GAME_WIDTH / 2, 330);
+            ctx.fillStyle = '#FF6600';
+            ctx.fillText('DEMO MODE - NO REWARDS', GAME_WIDTH / 2, 320);
           } else {
-            ctx.fillStyle = '#fcb900';
-            ctx.fillText('💰 Earn up to 10 PURPE tokens!', GAME_WIDTH / 2, 330);
+            ctx.fillStyle = '#FFFF00';
+            ctx.fillText('EARN UP TO 10 PURPE TOKENS!', GAME_WIDTH / 2, 320);
           }
         } else {
-          ctx.fillStyle = '#ef4444';
-          ctx.font = '16px Inter';
-          ctx.fillText('❌ Connect wallet or try quick start', GAME_WIDTH / 2, 280);
-          ctx.fillText('Need $10 USD in PURPE tokens for rewards', GAME_WIDTH / 2, 305);
+          ctx.fillStyle = '#FF0000';
+          ctx.font = '14px monospace';
+          ctx.fillText('CONNECT WALLET OR TRY QUICK START', GAME_WIDTH / 2, 280);
+          ctx.fillText('NEED $10 IN PURPE TOKENS', GAME_WIDTH / 2, 300);
         }
 
-        ctx.fillStyle = '#a0aec0';
-        ctx.font = '14px Inter';
-        ctx.fillText('Controls: Arrow Keys, WASD, or Click/Tap', GAME_WIDTH / 2, 420);
-        ctx.fillText('Goal: Reach the top while avoiding obstacles!', GAME_WIDTH / 2, 440);
+        ctx.fillStyle = '#CCCCCC';
+        ctx.font = '12px monospace';
+        ctx.fillText('ARROW KEYS / WASD / MOUSE CLICK', GAME_WIDTH / 2, 420);
+        ctx.fillText('REACH THE TOP TO WIN!', GAME_WIDTH / 2, 440);
         
         return;
       }
 
-      // Game background
+      // Draw 8-bit game world
       const levelConfig = LEVELS[currentLevel];
       if (levelConfig) {
-        ctx.fillStyle = levelConfig.background;
+        ctx.fillStyle = levelConfig.backgroundColor;
         ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
       }
 
-      // Draw water sections
-      ctx.fillStyle = '#1e40af80';
-      ctx.fillRect(0, 150, GAME_WIDTH, 200);
-      
-      // Draw safe zones
-      ctx.fillStyle = '#059669';
-      ctx.fillRect(0, 0, GAME_WIDTH, 50); // Top safe zone
-      ctx.fillRect(0, GAME_HEIGHT - 50, GAME_WIDTH, 50); // Bottom safe zone
+      // Draw grid background (subtle)
+      ctx.strokeStyle = '#FFFFFF10';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= GRID_COLS; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * GRID_SIZE, 0);
+        ctx.lineTo(i * GRID_SIZE, GAME_HEIGHT);
+        ctx.stroke();
+      }
+      for (let i = 0; i <= GRID_ROWS; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, i * GRID_SIZE);
+        ctx.lineTo(GAME_WIDTH, i * GRID_SIZE);
+        ctx.stroke();
+      }
 
-      // Draw obstacles
+      // Draw level background zones
+      if (levelConfig && levelConfig.rows) {
+        levelConfig.rows.forEach(row => {
+          const y = row.y * GRID_SIZE;
+          if (row.type === 'safe') {
+            ctx.fillStyle = row.color;
+            ctx.fillRect(0, y, GAME_WIDTH, GRID_SIZE);
+          }
+        });
+      }
+
+      // Draw 8-bit obstacles
       obstacles.forEach(obstacle => {
         switch (obstacle.type) {
           case 'lily_pad':
-            ctx.fillStyle = '#16a34a';
-            ctx.beginPath();
-            ctx.ellipse(obstacle.x + obstacle.width/2, obstacle.y + obstacle.height/2, 
-                       obstacle.width/2, obstacle.height/2, 0, 0, Math.PI * 2);
-            ctx.fill();
+            draw8BitSprite(ctx, obstacle.x, obstacle.y, obstacle.width, obstacle.height, 
+              COLORS.lilyPad, { type: 'crosshatch', color: COLORS.lilyPadPattern });
             break;
           case 'log':
-            ctx.fillStyle = '#92400e';
-            ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            draw8BitSprite(ctx, obstacle.x, obstacle.y, obstacle.width, obstacle.height,
+              COLORS.log, { type: 'woodgrain', color: COLORS.logPattern });
             break;
-          case 'dragonfly':
-            ctx.fillStyle = '#3b82f6';
-            ctx.beginPath();
-            ctx.ellipse(obstacle.x + obstacle.width/2, obstacle.y + obstacle.height/2,
-                       obstacle.width/2, obstacle.height/2, 0, 0, Math.PI * 2);
-            ctx.fill();
+          case 'rock':
+            draw8BitSprite(ctx, obstacle.x, obstacle.y, obstacle.width, obstacle.height, COLORS.rocks);
             break;
           case 'fish':
-            ctx.fillStyle = '#f97316';
-            ctx.beginPath();
-            ctx.ellipse(obstacle.x + obstacle.width/2, obstacle.y + obstacle.height/2,
-                       obstacle.width/2, obstacle.height/2, 0, 0, Math.PI * 2);
-            ctx.fill();
+            draw8BitSprite(ctx, obstacle.x, obstacle.y, obstacle.width, obstacle.height,
+              '#FF6600', { type: 'scales', color: '#FFAA00' });
             break;
           case 'turtle':
-            ctx.fillStyle = '#15803d';
-            ctx.beginPath();
-            ctx.ellipse(obstacle.x + obstacle.width/2, obstacle.y + obstacle.height/2,
-                       obstacle.width/2, obstacle.height/2, 0, 0, Math.PI * 2);
-            ctx.fill();
+            draw8BitSprite(ctx, obstacle.x, obstacle.y, obstacle.width, obstacle.height,
+              '#228B22', { type: 'scales', color: '#32CD32' });
             break;
           case 'crocodile':
-            ctx.fillStyle = '#166534';
-            ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            draw8BitSprite(ctx, obstacle.x, obstacle.y, obstacle.width, obstacle.height,
+              '#006400', { type: 'scales', color: '#228B22' });
             break;
         }
       });
 
-      // Draw frog (Purpe) with enhanced graphics
-      const frogGradient = ctx.createRadialGradient(
-        frogPosition.x + FROG_SIZE/2, frogPosition.y + FROG_SIZE/2, 0,
-        frogPosition.x + FROG_SIZE/2, frogPosition.y + FROG_SIZE/2, FROG_SIZE/2
-      );
-      frogGradient.addColorStop(0, '#c084fc');
-      frogGradient.addColorStop(0.5, '#a855f7');
-      frogGradient.addColorStop(1, '#7c3aed');
+      // Draw 8-bit frog (Purpe)
+      draw8BitSprite(ctx, frogPosition.x, frogPosition.y, FROG_SIZE, FROG_SIZE, COLORS.frog);
       
-      ctx.fillStyle = frogGradient;
-      ctx.beginPath();
-      ctx.ellipse(frogPosition.x + FROG_SIZE/2, frogPosition.y + FROG_SIZE/2,
-                 FROG_SIZE/2, FROG_SIZE/2, 0, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Frog eyes
-      ctx.fillStyle = '#ffffff';
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 1;
-      
-      ctx.beginPath();
-      ctx.ellipse(frogPosition.x + FROG_SIZE/3, frogPosition.y + FROG_SIZE/3, 5, 6, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-      
-      ctx.beginPath();
-      ctx.ellipse(frogPosition.x + 2*FROG_SIZE/3, frogPosition.y + FROG_SIZE/3, 5, 6, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
+      // Frog eyes (8-bit style)
+      ctx.fillStyle = COLORS.frogEyes;
+      ctx.fillRect(frogPosition.x + 6, frogPosition.y + 6, 6, 6);
+      ctx.fillRect(frogPosition.x + 16, frogPosition.y + 6, 6, 6);
       
       // Pupils
-      ctx.fillStyle = '#000000';
-      ctx.beginPath();
-      ctx.ellipse(frogPosition.x + FROG_SIZE/3, frogPosition.y + FROG_SIZE/3, 2, 3, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(frogPosition.x + 2*FROG_SIZE/3, frogPosition.y + FROG_SIZE/3, 2, 3, 0, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillStyle = COLORS.frogPupils;
+      ctx.fillRect(frogPosition.x + 8, frogPosition.y + 8, 2, 2);
+      ctx.fillRect(frogPosition.x + 18, frogPosition.y + 8, 2, 2);
 
       // HUD
       ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
