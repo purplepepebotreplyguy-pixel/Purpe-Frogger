@@ -368,32 +368,60 @@ export const FroggerGame = ({ walletReady, authToken, onRewardEarned, userStats 
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
     if (gameState === 'menu') {
-      // Menu screen
-      ctx.fillStyle = '#0f172a';
+      // Menu screen with gradient background
+      const gradient = ctx.createLinearGradient(0, 0, 0, GAME_HEIGHT);
+      gradient.addColorStop(0, '#4a5568');
+      gradient.addColorStop(1, '#1a202c');
+      ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
       
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 40px Inter';
+      ctx.font = 'bold 36px Inter';
       ctx.textAlign = 'center';
-      ctx.fillText("Purpe's Leap", GAME_WIDTH / 2, 150);
+      ctx.fillText("Purpe's Leap", GAME_WIDTH / 2, 120);
       
-      ctx.font = '20px Inter';
-      ctx.fillText('Web3 Frogger on Solana', GAME_WIDTH / 2, 200);
+      ctx.font = '18px Inter';
+      ctx.fillText('Web3 Frogger on Solana', GAME_WIDTH / 2, 160);
+      
+      // Game preview - show a small frog
+      const previewGradient = ctx.createRadialGradient(
+        GAME_WIDTH / 2, 200, 0,
+        GAME_WIDTH / 2, 200, 20
+      );
+      previewGradient.addColorStop(0, '#c084fc');
+      previewGradient.addColorStop(1, '#7c3aed');
+      ctx.fillStyle = previewGradient;
+      ctx.beginPath();
+      ctx.ellipse(GAME_WIDTH / 2, 200, 20, 20, 0, 0, Math.PI * 2);
+      ctx.fill();
       
       if (walletReady) {
         ctx.fillStyle = '#10b981';
-        ctx.fillText('✅ Ready to Play!', GAME_WIDTH / 2, 300);
-        ctx.fillText('Press SPACE to start or click the button below', GAME_WIDTH / 2, 350);
+        ctx.font = '16px Inter';
+        ctx.fillText('✅ Ready to Play!', GAME_WIDTH / 2, 250);
+        ctx.fillText('Press SPACE or click button below', GAME_WIDTH / 2, 275);
+        
+        // Reward info
+        const isDemoMode = localStorage.getItem('demo_mode') === 'true';
+        if (isDemoMode) {
+          ctx.fillStyle = '#ff6900';
+          ctx.fillText('🎮 Demo Mode - No Rewards', GAME_WIDTH / 2, 300);
+        } else {
+          ctx.fillStyle = '#fcb900';
+          ctx.fillText('💰 Earn up to 10 PURPE tokens!', GAME_WIDTH / 2, 300);
+        }
       } else {
         ctx.fillStyle = '#ef4444';
-        ctx.fillText('❌ Connect & authenticate wallet first', GAME_WIDTH / 2, 300);
-        ctx.fillText('Need $10 USD in PURPE tokens', GAME_WIDTH / 2, 330);
+        ctx.font = '16px Inter';
+        ctx.fillText('❌ Connect wallet or try demo mode', GAME_WIDTH / 2, 250);
+        ctx.fillText('Need $10 USD in PURPE tokens for rewards', GAME_WIDTH / 2, 275);
       }
 
       // Controls
-      ctx.fillStyle = '#64748b';
-      ctx.font = '16px Inter';
-      ctx.fillText('Controls: Arrow Keys or WASD', GAME_WIDTH / 2, 450);
+      ctx.fillStyle = '#a0aec0';
+      ctx.font = '14px Inter';
+      ctx.fillText('Controls: Arrow Keys, WASD, or Click/Tap', GAME_WIDTH / 2, 420);
+      ctx.fillText('Goal: Reach the top while avoiding obstacles!', GAME_WIDTH / 2, 440);
       
       return;
     }
