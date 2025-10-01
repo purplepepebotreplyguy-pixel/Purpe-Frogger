@@ -358,30 +358,32 @@ export const GamePage = () => {
 
   // Handle frog movement with grid-based positioning
   const moveFrog = useCallback((direction) => {
+    if (gameState !== 'playing') return;
+    
     const currentTime = Date.now();
     if (currentTime - lastMoveTime < 200) return; // Slightly slower for 8-bit feel
     
     setLastMoveTime(currentTime);
     
     setFrogPosition(prev => {
-      let newGridX = prev.gridX;
-      let newGridY = prev.gridY;
+      let newGridX = prev.gridX || Math.floor(prev.x / GRID_SIZE);
+      let newGridY = prev.gridY || Math.floor(prev.y / GRID_SIZE);
 
       switch (direction) {
         case 'left':
-          newGridX = Math.max(0, prev.gridX - 1);
+          newGridX = Math.max(0, newGridX - 1);
           break;
         case 'right':
-          newGridX = Math.min(GRID_COLS - 1, prev.gridX + 1);
+          newGridX = Math.min(GRID_COLS - 1, newGridX + 1);
           break;
         case 'up':
-          newGridY = Math.max(1, prev.gridY - 1);
-          if (newGridY < prev.gridY) {
+          newGridY = Math.max(1, newGridY - 1);
+          if (newGridY < (prev.gridY || Math.floor(prev.y / GRID_SIZE))) {
             setScore(s => s + 10); // Score for moving forward
           }
           break;
         case 'down':
-          newGridY = Math.min(GRID_ROWS - 2, prev.gridY + 1);
+          newGridY = Math.min(GRID_ROWS - 2, newGridY + 1);
           break;
         default:
           return prev;
@@ -394,7 +396,7 @@ export const GamePage = () => {
         gridY: newGridY
       };
     });
-  }, [lastMoveTime]);
+  }, [gameState, lastMoveTime]);
 
   // Handle keyboard movement
   useEffect(() => {
