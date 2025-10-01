@@ -253,8 +253,23 @@ export const WalletInterface = ({ onWalletReady, tokenBalance, setTokenBalance }
                         </button>
                       </div>
                     ) : (
-                      <div className="flex items-center justify-center text-green-400">
-                        ✅ <span className="ml-2">Wallet Authenticated</span>
+                      <div className="space-y-2">
+                        {localStorage.getItem('demo_mode') === 'true' ? (
+                          <div className="bg-purple-600/30 rounded-lg p-3 border border-purple-400/50">
+                            <div className="flex items-center justify-center text-purple-200 mb-1">
+                              🎮 <span className="ml-2 font-semibold">Demo Mode Active</span>
+                            </div>
+                            <div className="text-purple-300 text-xs text-center">
+                              • No PURPE tokens required<br/>
+                              • Reduced rewards (0.05 SOL max/day)<br/>
+                              • 1 minute cooldown between rewards
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center text-green-400">
+                            ✅ <span className="ml-2">Wallet Authenticated</span>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
