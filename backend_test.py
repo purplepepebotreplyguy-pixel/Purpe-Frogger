@@ -143,7 +143,7 @@ class PurpeLeapAPITester:
     def test_token_balance(self):
         """Test token balance endpoint"""
         if not hasattr(self, 'test_wallet'):
-            self.test_wallet = "So11111111111111111111111111111111111111112"
+            self.test_wallet = "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
             
         success, response = self.run_test(
             "Get Token Balance",
