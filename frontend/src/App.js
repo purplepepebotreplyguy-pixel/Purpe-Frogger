@@ -185,7 +185,7 @@ function App() {
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold" style={{color: '#ffffff'}}>📊 Quick Stats</h3>
                     {isDemoMode && (
-                      <span className="bg-purple-600/50 text-purple-200 px-2 py-1 rounded-full text-xs font-semibold">
+                      <span className="px-2 py-1 rounded-full text-xs font-semibold" style={{background: '#ff6900', color: '#ffffff'}}>
                         DEMO
                       </span>
                     )}
