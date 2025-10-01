@@ -9,11 +9,29 @@ import axios from 'axios';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-// Game constants
+// Game constants - 8-bit style
 const GAME_WIDTH = 800;
 const GAME_HEIGHT = 600;
-const FROG_SIZE = 30;
-const GRID_SIZE = 40;
+const GRID_SIZE = 32; // 8-bit grid size
+const FROG_SIZE = GRID_SIZE - 2; // Slightly smaller than grid
+const GRID_ROWS = Math.floor(GAME_HEIGHT / GRID_SIZE);
+const GRID_COLS = Math.floor(GAME_WIDTH / GRID_SIZE);
+
+// 8-bit color palette
+const COLORS = {
+  water: '#4ECDC4', // Vibrant teal
+  grass: '#2E8B57', // Dark green
+  grassBorder: '#1E5C2F', // Darker green border
+  lilyPad: '#32CD32', // Lime green
+  lilyPadPattern: '#90EE90', // Light green pattern
+  log: '#8B4513', // Saddle brown
+  logPattern: '#DEB887', // Burlywood for wood grain
+  frog: '#9932CC', // Dark orchid (Purpe's color)
+  frogEyes: '#FFFFFF', // White eyes
+  frogPupils: '#000000', // Black pupils
+  rocks: '#696969', // Dim gray
+  text: '#FFFFFF' // White text
+};
 
 // Level configurations
 const LEVELS = {
