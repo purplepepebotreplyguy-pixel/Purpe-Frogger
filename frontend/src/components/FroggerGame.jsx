@@ -90,22 +90,46 @@ export const FroggerGame = ({ walletReady, authToken, onRewardEarned, userStats 
 
       if (response.data.success) {
         setSessionId(response.data.session_id);
-        setGameState('playing');
         setCurrentLevel(1);
         setScore(0);
         setLives(3);
-        setFrogPosition({ x: GAME_WIDTH / 2, y: GAME_HEIGHT - 50 });
+        setFrogPosition({ x: GAME_WIDTH / 2 - FROG_SIZE / 2, y: GAME_HEIGHT - 80 });
         setObstacles(initializeLevel(1));
         setLevelStartTime(Date.now());
+        setGameState('playing');
         
         if (!response.data.eligible_for_rewards) {
-          alert(`Note: ${response.data.eligibility_reason}`);
+          console.log(`Note: ${response.data.eligibility_reason}`);
         }
       }
     } catch (error) {
       console.error('Failed to start game session:', error);
-      alert('Failed to start game session. Please try again.');
+      // For demo mode, allow starting without backend session
+      if (localStorage.getItem('demo_mode') === 'true') {
+        setSessionId('demo_session');
+        setCurrentLevel(1);
+        setScore(0);
+        setLives(3);
+        setFrogPosition({ x: GAME_WIDTH / 2 - FROG_SIZE / 2, y: GAME_HEIGHT - 80 });
+        setObstacles(initializeLevel(1));
+        setLevelStartTime(Date.now());
+        setGameState('playing');
+      } else {
+        alert('Failed to start game session. Please try again.');
+      }
     }
+  };
+
+  // Force start game for demo mode
+  const forceStartGame = () => {
+    setSessionId('demo_session');
+    setCurrentLevel(1);
+    setScore(0);
+    setLives(3);
+    setFrogPosition({ x: GAME_WIDTH / 2 - FROG_SIZE / 2, y: GAME_HEIGHT - 80 });
+    setObstacles(initializeLevel(1));
+    setLevelStartTime(Date.now());
+    setGameState('playing');
   };
 
   // Complete game session
