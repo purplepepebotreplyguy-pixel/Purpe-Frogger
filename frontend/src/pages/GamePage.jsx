@@ -719,33 +719,32 @@ export const GamePage = () => {
     ctx.fillRect(x, y, size, size);
   };
 
-  // Draw sprite from sprite sheet
+  // Draw sprite from sprite sheet using exact coordinates
   const drawSprite = (ctx, frameIndex, x, y, width = FROG_SIZE, height = FROG_SIZE) => {
-    if (!spriteSheet || frameIndex < 0 || frameIndex >= SPRITE_CONFIG.totalFrames) {
-      console.log(`Sprite drawing failed: spriteSheet=${!!spriteSheet}, frameIndex=${frameIndex}, totalFrames=${SPRITE_CONFIG.totalFrames}`);
+    if (!spriteSheet || !SPRITE_CONFIG.frames[frameIndex]) {
+      console.log(`Sprite drawing failed: spriteSheet=${!!spriteSheet}, frameIndex=${frameIndex}, frameExists=${!!SPRITE_CONFIG.frames[frameIndex]}`);
       return false; // Return false if sprite drawing failed
     }
 
     try {
-      // Calculate source position on sprite sheet using actual coordinates
-      const col = frameIndex % SPRITE_CONFIG.layout.cols;
-      const row = Math.floor(frameIndex / SPRITE_CONFIG.layout.cols);
-      
-      const srcX = SPRITE_CONFIG.startX + (col * SPRITE_CONFIG.frameWidth);
-      const srcY = SPRITE_CONFIG.startY + (row * SPRITE_CONFIG.frameHeight);
+      // Get exact frame coordinates
+      const frame = SPRITE_CONFIG.frames[frameIndex];
+      const srcX = frame.x;
+      const srcY = frame.y;
+      const srcWidth = frame.width;
+      const srcHeight = frame.height;
 
       // Debug logging for first few calls
-      if (frameIndex === 0) {
-        console.log(`Drawing sprite: frame=${frameIndex}, col=${col}, row=${row}, srcX=${srcX}, srcY=${srcY}, destX=${x}, destY=${y}`);
+      if (frameIndex <= 4) {
+        console.log(`Drawing sprite: frame=${frameIndex}, srcX=${srcX}, srcY=${srcY}, srcW=${srcWidth}, srcH=${srcHeight}, destX=${x}, destY=${y}`);
         console.log(`Sprite sheet size: ${spriteSheet.width}x${spriteSheet.height}`);
-        console.log(`Frame size: ${SPRITE_CONFIG.frameWidth}x${SPRITE_CONFIG.frameHeight}`);
       }
 
-      // Draw the sprite
+      // Draw the sprite with exact dimensions
       ctx.imageSmoothingEnabled = false;
       ctx.drawImage(
         spriteSheet,
-        srcX, srcY, SPRITE_CONFIG.frameWidth, SPRITE_CONFIG.frameHeight, // Source
+        srcX, srcY, srcWidth, srcHeight, // Source with exact dimensions
         x, y, width, height // Destination
       );
       return true;
