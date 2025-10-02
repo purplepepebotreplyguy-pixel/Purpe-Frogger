@@ -19,11 +19,11 @@ const GRID_COLS = Math.floor(GAME_WIDTH / GRID_SIZE);
 
 // Sprite sheet configuration
 const SPRITE_CONFIG = {
-  url: 'https://raw.githubusercontent.com/purplepepebotreplyguy-pixel/Purpe-Frogger/main/Character_Sprites_animation.png',
+  url: 'https://raw.githubusercontent.com/purplepepebotreplyguy-pixel/Purpe-Frogger/main/character_sprites_animation_v2.png',
   frameWidth: 16,
   frameHeight: 16,
-  totalFrames: 16,
-  layout: { cols: 16, rows: 1 },
+  totalFrames: 17,
+  layout: { cols: 17, rows: 1 },
   animations: {
     idle: { startFrame: 0, endFrame: 0, duration: 1000 },
     up: { startFrame: 1, endFrame: 3, duration: 100 },
@@ -31,7 +31,7 @@ const SPRITE_CONFIG = {
     left: { startFrame: 7, endFrame: 9, duration: 100 },
     right: { startFrame: 10, endFrame: 12, duration: 100 },
     bonus: { startFrame: 13, endFrame: 15, duration: 150 },
-    splatter: { startFrame: 15, endFrame: 15, duration: 500 }
+    splatter: { startFrame: 16, endFrame: 16, duration: 500 }
   }
 };
 
