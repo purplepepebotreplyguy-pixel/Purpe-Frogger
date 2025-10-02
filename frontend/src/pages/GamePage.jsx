@@ -128,6 +128,26 @@ export const GamePage = () => {
   const [keys, setKeys] = useState({});
   const [lastMoveTime, setLastMoveTime] = useState(0);
 
+  // Load sprite sheet
+  useEffect(() => {
+    const loadSpriteSheet = () => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous'; // Enable CORS
+      img.onload = () => {
+        setSpriteSheet(img);
+        console.log('Sprite sheet loaded successfully');
+      };
+      img.onerror = (error) => {
+        console.error('Failed to load sprite sheet:', error);
+        // Fallback to basic rendering if sprite sheet fails
+        setSpriteSheet(null);
+      };
+      img.src = SPRITE_CONFIG.url;
+    };
+
+    loadSpriteSheet();
+  }, []);
+
   // Initialize obstacles for current level - 8-bit grid system
   const initializeLevel = useCallback((level) => {
     const levelConfig = LEVELS[level];
