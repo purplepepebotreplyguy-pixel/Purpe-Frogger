@@ -681,6 +681,34 @@ export const GamePage = () => {
     ctx.fillRect(x, y, size, size);
   };
 
+  // Draw sprite from sprite sheet
+  const drawSprite = (ctx, frameIndex, x, y, width = FROG_SIZE, height = FROG_SIZE) => {
+    if (!spriteSheet || frameIndex < 0 || frameIndex >= SPRITE_CONFIG.totalFrames) {
+      return false; // Return false if sprite drawing failed
+    }
+
+    try {
+      // Calculate source position on sprite sheet
+      const col = frameIndex % SPRITE_CONFIG.layout.cols;
+      const row = Math.floor(frameIndex / SPRITE_CONFIG.layout.cols);
+      
+      const srcX = col * SPRITE_CONFIG.frameWidth;
+      const srcY = row * SPRITE_CONFIG.frameHeight;
+
+      // Draw the sprite
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(
+        spriteSheet,
+        srcX, srcY, SPRITE_CONFIG.frameWidth, SPRITE_CONFIG.frameHeight, // Source
+        x, y, width, height // Destination
+      );
+      return true;
+    } catch (error) {
+      console.error('Error drawing sprite:', error);
+      return false;
+    }
+  };
+
   const draw8BitSprite = (ctx, x, y, width, height, primaryColor, pattern = null) => {
     ctx.imageSmoothingEnabled = false;
     ctx.fillStyle = primaryColor;
