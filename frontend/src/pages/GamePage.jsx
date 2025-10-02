@@ -110,6 +110,13 @@ export const GamePage = () => {
   const [sessionId, setSessionId] = useState(null);
   const [levelStartTime, setLevelStartTime] = useState(null);
   
+  // Sprite animation state
+  const [spriteSheet, setSpriteSheet] = useState(null);
+  const [currentAnimation, setCurrentAnimation] = useState('idle');
+  const [currentFrame, setCurrentFrame] = useState(0);
+  const [animationStartTime, setAnimationStartTime] = useState(Date.now());
+  const [lastDirection, setLastDirection] = useState(null);
+  
   // UI state
   const [activeTab, setActiveTab] = useState('game');
   const [walletReady, setWalletReady] = useState(false);
