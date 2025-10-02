@@ -637,10 +637,18 @@ export const GamePage = () => {
           
           // Don't let frog go off screen
           if (newGridX < 0 || newGridX >= GRID_COLS) {
-            // Frog falls off moving platform
-            const startGridX = Math.floor(GRID_COLS / 2);
-            const startGridY = GRID_ROWS - 2;
-            setLives(prevLives => Math.max(0, prevLives - 1));
+            // Frog falls off moving platform - trigger death animation
+            setCurrentAnimation('splatter');
+            setAnimationStartTime(Date.now());
+            
+            setTimeout(() => {
+              setLives(prevLives => Math.max(0, prevLives - 1));
+              const startGridX = Math.floor(GRID_COLS / 2);
+              const startGridY = GRID_ROWS - 2;
+              setCurrentAnimation('idle');
+              setAnimationStartTime(Date.now());
+            }, SPRITE_CONFIG.animations.splatter.duration);
+            
             return { 
               x: startGridX * GRID_SIZE + 2, 
               y: startGridY * GRID_SIZE + 2,
