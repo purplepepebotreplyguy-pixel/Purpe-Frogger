@@ -599,24 +599,33 @@ export const GamePage = () => {
       
       // If in water without platform, frog drowns
       if (!isOnSafePlatform && currentRow?.type !== 'safe') {
-        setLives(prev => {
-          const newLives = prev - 1;
-          if (newLives <= 0) {
-            setGameState('game_over');
-            completeGameSession(score, currentLevel - 1);
-          }
-          return newLives;
-        });
+        // Trigger death animation
+        setCurrentAnimation('splatter');
+        setAnimationStartTime(Date.now());
         
-        // Reset frog position
-        const startGridX = Math.floor(GRID_COLS / 2);
-        const startGridY = GRID_ROWS - 2;
-        setFrogPosition({ 
-          x: startGridX * GRID_SIZE + 2, 
-          y: startGridY * GRID_SIZE + 2,
-          gridX: startGridX,
-          gridY: startGridY
-        });
+        setTimeout(() => {
+          setLives(prev => {
+            const newLives = prev - 1;
+            if (newLives <= 0) {
+              setGameState('game_over');
+              completeGameSession(score, currentLevel - 1);
+            }
+            return newLives;
+          });
+          
+          // Reset frog position and animation
+          const startGridX = Math.floor(GRID_COLS / 2);
+          const startGridY = GRID_ROWS - 2;
+          setFrogPosition({ 
+            x: startGridX * GRID_SIZE + 2, 
+            y: startGridY * GRID_SIZE + 2,
+            gridX: startGridX,
+            gridY: startGridY
+          });
+          setCurrentAnimation('idle');
+          setAnimationStartTime(Date.now());
+        }, SPRITE_CONFIG.animations.splatter.duration);
+        
         return;
       }
       
