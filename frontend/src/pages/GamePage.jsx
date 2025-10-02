@@ -812,18 +812,24 @@ export const GamePage = () => {
         ctx.font = '16px monospace';
         ctx.fillText('8-BIT WEB3 FROGGER', GAME_WIDTH / 2, 150);
         
-        // Draw preview 8-bit frog
+        // Draw preview frog (sprite or fallback)
         const previewX = GAME_WIDTH / 2 - GRID_SIZE / 2;
         const previewY = 200;
-        draw8BitSprite(ctx, previewX, previewY, GRID_SIZE - 4, GRID_SIZE - 4, COLORS.frog);
         
-        // Frog eyes
-        ctx.fillStyle = COLORS.frogEyes;
-        ctx.fillRect(previewX + 6, previewY + 6, 6, 6);
-        ctx.fillRect(previewX + 16, previewY + 6, 6, 6);
-        ctx.fillStyle = COLORS.frogPupils;
-        ctx.fillRect(previewX + 8, previewY + 8, 2, 2);
-        ctx.fillRect(previewX + 18, previewY + 8, 2, 2);
+        // Try to draw sprite, fallback to basic rectangle
+        const spriteDrawn = drawSprite(ctx, 0, previewX, previewY, GRID_SIZE - 4, GRID_SIZE - 4);
+        if (!spriteDrawn) {
+          // Fallback to basic 8-bit frog
+          draw8BitSprite(ctx, previewX, previewY, GRID_SIZE - 4, GRID_SIZE - 4, COLORS.frog);
+          
+          // Frog eyes
+          ctx.fillStyle = COLORS.frogEyes;
+          ctx.fillRect(previewX + 6, previewY + 6, 6, 6);
+          ctx.fillRect(previewX + 16, previewY + 6, 6, 6);
+          ctx.fillStyle = COLORS.frogPupils;
+          ctx.fillRect(previewX + 8, previewY + 8, 2, 2);
+          ctx.fillRect(previewX + 18, previewY + 8, 2, 2);
+        }
         
         if (walletReady) {
           ctx.fillStyle = '#00FF00';
