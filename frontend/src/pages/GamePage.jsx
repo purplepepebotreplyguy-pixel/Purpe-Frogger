@@ -719,17 +719,18 @@ export const GamePage = () => {
     }
 
     try {
-      // Calculate source position on sprite sheet
+      // Calculate source position on sprite sheet using actual coordinates
       const col = frameIndex % SPRITE_CONFIG.layout.cols;
       const row = Math.floor(frameIndex / SPRITE_CONFIG.layout.cols);
       
-      const srcX = col * SPRITE_CONFIG.frameWidth;
-      const srcY = row * SPRITE_CONFIG.frameHeight;
+      const srcX = SPRITE_CONFIG.startX + (col * SPRITE_CONFIG.frameWidth);
+      const srcY = SPRITE_CONFIG.startY + (row * SPRITE_CONFIG.frameHeight);
 
       // Debug logging for first few calls
       if (frameIndex === 0) {
         console.log(`Drawing sprite: frame=${frameIndex}, col=${col}, row=${row}, srcX=${srcX}, srcY=${srcY}, destX=${x}, destY=${y}`);
         console.log(`Sprite sheet size: ${spriteSheet.width}x${spriteSheet.height}`);
+        console.log(`Frame size: ${SPRITE_CONFIG.frameWidth}x${SPRITE_CONFIG.frameHeight}`);
       }
 
       // Draw the sprite
