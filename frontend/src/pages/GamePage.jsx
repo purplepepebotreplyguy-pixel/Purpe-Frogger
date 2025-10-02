@@ -17,7 +17,7 @@ const FROG_SIZE = GRID_SIZE - 2; // Slightly smaller than grid
 const GRID_ROWS = Math.floor(GAME_HEIGHT / GRID_SIZE);
 const GRID_COLS = Math.floor(GAME_WIDTH / GRID_SIZE);
 
-// Sprite sheet configuration - Using exact coordinates for each frame
+// Sprite sheet configuration - Using exact coordinates provided by user
 const SPRITE_CONFIG = {
   url: 'https://raw.githubusercontent.com/purplepepebotreplyguy-pixel/Purpe-Frogger/main/character_sprites_animation_v2.png',
   frames: {
@@ -26,22 +26,22 @@ const SPRITE_CONFIG = {
     2: { x: 641, y: 83, width: 165, height: 109 }, // Jump Forward 2
     3: { x: 835, y: 83, width: 135, height: 120 }, // Jump Forward 3
     4: { x: 448, y: 258, width: 135, height: 155 }, // Jump Down
-    // Adding placeholders for other frames - will need coordinates for left, right, splatter
-    5: { x: 56, y: 82, width: 104, height: 118 }, // Placeholder - need left movement frames
-    6: { x: 56, y: 82, width: 104, height: 118 }, // Placeholder
-    7: { x: 56, y: 82, width: 104, height: 118 }, // Placeholder
-    8: { x: 56, y: 82, width: 104, height: 118 }, // Placeholder - need right movement frames
-    9: { x: 56, y: 82, width: 104, height: 118 }, // Placeholder
-    10: { x: 56, y: 82, width: 104, height: 118 }, // Placeholder
-    11: { x: 56, y: 82, width: 104, height: 118 }, // Placeholder - need splatter frame
+    // Using stationary frame as placeholder for missing animations
+    5: { x: 56, y: 82, width: 104, height: 118 }, // Left placeholder
+    6: { x: 56, y: 82, width: 104, height: 118 }, // Left placeholder
+    7: { x: 56, y: 82, width: 104, height: 118 }, // Left placeholder
+    8: { x: 56, y: 82, width: 104, height: 118 }, // Right placeholder
+    9: { x: 56, y: 82, width: 104, height: 118 }, // Right placeholder
+    10: { x: 56, y: 82, width: 104, height: 118 }, // Right placeholder
+    11: { x: 56, y: 82, width: 104, height: 118 }, // Splatter placeholder
   },
   animations: {
     idle: { frames: [0], duration: 1000 },
-    up: { frames: [1, 2, 3], duration: 100 },
-    down: { frames: [4], duration: 100 },
-    left: { frames: [5, 6, 7], duration: 100 }, // Will use placeholders until you provide coordinates
-    right: { frames: [8, 9, 10], duration: 100 }, // Will use placeholders until you provide coordinates
-    splatter: { frames: [11], duration: 500 } // Will use placeholder until you provide coordinates
+    up: { frames: [1, 2, 3], duration: 100 }, // Using provided coordinates
+    down: { frames: [4], duration: 100 }, // Using provided coordinate
+    left: { frames: [0], duration: 100 }, // Using stationary for now
+    right: { frames: [0], duration: 100 }, // Using stationary for now
+    splatter: { frames: [0], duration: 500 } // Using stationary for now
   }
 };
 
