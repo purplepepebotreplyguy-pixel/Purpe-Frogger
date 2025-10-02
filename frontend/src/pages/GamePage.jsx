@@ -161,7 +161,7 @@ export const GamePage = () => {
     loadSpriteSheet();
   }, []);
 
-  // Animation system
+  // Animation system using frame arrays
   const updateAnimation = useCallback(() => {
     if (!spriteSheet) return;
 
@@ -170,16 +170,16 @@ export const GamePage = () => {
     if (!animation) return;
 
     const elapsed = now - animationStartTime;
-    const frameCount = animation.endFrame - animation.startFrame + 1;
+    const frameCount = animation.frames.length;
     const frameDuration = animation.duration;
 
     if (frameCount === 1) {
       // Single frame animation (idle, splatter)
-      setCurrentFrame(animation.startFrame);
+      setCurrentFrame(animation.frames[0]);
     } else {
       // Multi-frame animation
       const frameIndex = Math.floor(elapsed / frameDuration) % frameCount;
-      setCurrentFrame(animation.startFrame + frameIndex);
+      setCurrentFrame(animation.frames[frameIndex]);
     }
   }, [spriteSheet, currentAnimation, animationStartTime]);
 
