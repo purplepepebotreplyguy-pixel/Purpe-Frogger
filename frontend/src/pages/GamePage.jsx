@@ -401,6 +401,20 @@ export const GamePage = () => {
     
     setLastMoveTime(currentTime);
     
+    // Trigger movement animation
+    if (direction !== lastDirection) {
+      setCurrentAnimation(direction);
+      setAnimationStartTime(currentTime);
+      setLastDirection(direction);
+    }
+    
+    // Reset to idle animation after movement
+    setTimeout(() => {
+      setCurrentAnimation('idle');
+      setAnimationStartTime(Date.now());
+      setLastDirection(null);
+    }, 300);
+    
     setFrogPosition(prev => {
       let newGridX = prev.gridX || Math.floor(prev.x / GRID_SIZE);
       let newGridY = prev.gridY || Math.floor(prev.y / GRID_SIZE);
@@ -432,7 +446,7 @@ export const GamePage = () => {
         gridY: newGridY
       };
     });
-  }, [gameState, lastMoveTime]);
+  }, [gameState, lastMoveTime, lastDirection]);
 
   // Handle mouse clicks on canvas - grid-based movement
   useEffect(() => {
