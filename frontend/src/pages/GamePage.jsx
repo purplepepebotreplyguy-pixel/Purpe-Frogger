@@ -19,7 +19,7 @@ const GRID_COLS = Math.floor(GAME_WIDTH / GRID_SIZE);
 
 // Sprite sheet configuration - Using exact coordinates provided by user
 const SPRITE_CONFIG = {
-  url: 'https://raw.githubusercontent.com/purplepepebotreplyguy-pixel/Purpe-Frogger/main/Character_Sprites_animation.png',
+  url: 'https://raw.githubusercontent.com/purplepepebotreplyguy-pixel/Purpe-Frogger/main/character_sprites_animation_v2.png',
   frames: {
     0: { x: 56, y: 82, width: 104, height: 118 }, // Stationary
     1: { x: 446, y: 83, width: 141, height: 122 }, // Jump Forward 1
