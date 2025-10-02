@@ -17,11 +17,13 @@ const FROG_SIZE = GRID_SIZE - 2; // Slightly smaller than grid
 const GRID_ROWS = Math.floor(GAME_HEIGHT / GRID_SIZE);
 const GRID_COLS = Math.floor(GAME_WIDTH / GRID_SIZE);
 
-// Sprite sheet configuration - Corrected to 16x16 frame size
+// Sprite sheet configuration - Using actual coordinates from sprite sheet
 const SPRITE_CONFIG = {
   url: 'https://raw.githubusercontent.com/purplepepebotreplyguy-pixel/Purpe-Frogger/main/character_sprites_animation_v2.png',
-  frameWidth: 16, // Correct frame width
-  frameHeight: 16, // Correct frame height  
+  frameWidth: 104, // Actual frame width
+  frameHeight: 118, // Actual frame height
+  startX: 56, // Starting X coordinate  
+  startY: 82, // Starting Y coordinate
   totalFrames: 17,
   layout: { cols: 17, rows: 1 },
   animations: {
