@@ -148,6 +148,34 @@ export const GamePage = () => {
     loadSpriteSheet();
   }, []);
 
+  // Animation system
+  const updateAnimation = useCallback(() => {
+    if (!spriteSheet) return;
+
+    const now = Date.now();
+    const animation = SPRITE_CONFIG.animations[currentAnimation];
+    if (!animation) return;
+
+    const elapsed = now - animationStartTime;
+    const frameCount = animation.endFrame - animation.startFrame + 1;
+    const frameDuration = animation.duration;
+
+    if (frameCount === 1) {
+      // Single frame animation (idle, splatter)
+      setCurrentFrame(animation.startFrame);
+    } else {
+      // Multi-frame animation
+      const frameIndex = Math.floor(elapsed / frameDuration) % frameCount;
+      setCurrentFrame(animation.startFrame + frameIndex);
+    }
+  }, [spriteSheet, currentAnimation, animationStartTime]);
+
+  // Update animation frames
+  useEffect(() => {
+    const animationInterval = setInterval(updateAnimation, 50); // 20 FPS for animations
+    return () => clearInterval(animationInterval);
+  }, [updateAnimation]);
+
   // Initialize obstacles for current level - 8-bit grid system
   const initializeLevel = useCallback((level) => {
     const levelConfig = LEVELS[level];
