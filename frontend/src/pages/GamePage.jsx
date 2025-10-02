@@ -134,11 +134,14 @@ export const GamePage = () => {
       const img = new Image();
       img.crossOrigin = 'anonymous'; // Enable CORS
       img.onload = () => {
+        console.log(`Sprite sheet loaded successfully: ${img.width}x${img.height} pixels from ${SPRITE_CONFIG.url}`);
+        console.log(`Expected frames: ${SPRITE_CONFIG.totalFrames} (${SPRITE_CONFIG.layout.cols}x${SPRITE_CONFIG.layout.rows})`);
+        console.log(`Frame size: ${SPRITE_CONFIG.frameWidth}x${SPRITE_CONFIG.frameHeight}`);
         setSpriteSheet(img);
-        console.log('Sprite sheet loaded successfully');
       };
       img.onerror = (error) => {
         console.error('Failed to load sprite sheet:', error);
+        console.error('URL was:', SPRITE_CONFIG.url);
         // Fallback to basic rendering if sprite sheet fails
         setSpriteSheet(null);
       };
