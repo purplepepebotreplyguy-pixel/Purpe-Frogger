@@ -17,6 +17,24 @@ const FROG_SIZE = GRID_SIZE - 2; // Slightly smaller than grid
 const GRID_ROWS = Math.floor(GAME_HEIGHT / GRID_SIZE);
 const GRID_COLS = Math.floor(GAME_WIDTH / GRID_SIZE);
 
+// Sprite sheet configuration
+const SPRITE_CONFIG = {
+  url: 'https://raw.githubusercontent.com/purplepepebotreplyguy-pixel/Purpe-Frogger/main/Character_Sprites_animation.png',
+  frameWidth: 16,
+  frameHeight: 16,
+  totalFrames: 16,
+  layout: { cols: 16, rows: 1 },
+  animations: {
+    idle: { startFrame: 0, endFrame: 0, duration: 1000 },
+    up: { startFrame: 1, endFrame: 3, duration: 100 },
+    down: { startFrame: 4, endFrame: 6, duration: 100 },
+    left: { startFrame: 7, endFrame: 9, duration: 100 },
+    right: { startFrame: 10, endFrame: 12, duration: 100 },
+    bonus: { startFrame: 13, endFrame: 15, duration: 150 },
+    splatter: { startFrame: 15, endFrame: 15, duration: 500 }
+  }
+};
+
 // 8-bit color palette
 const COLORS = {
   water: '#4ECDC4', // Vibrant teal
