@@ -7,7 +7,7 @@ import time
 from datetime import datetime
 
 class PurpeLeapAPITester:
-    def __init__(self, base_url="https://leap-game-1.preview.emergentagent.com"):
+    def __init__(self, base_url="https://crypto-frog.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.token = None
@@ -310,7 +310,7 @@ class PurpeLeapAPITester:
 def main():
     """Main test runner"""
     print("🐸 Purpe's Leap Backend API Tester")
-    print("Testing against: https://leap-game-1.preview.emergentagent.com")
+    print("Testing against: https://crypto-frog.preview.emergentagent.com")
     
     tester = PurpeLeapAPITester()
     
