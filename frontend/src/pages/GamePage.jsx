@@ -923,18 +923,22 @@ export const GamePage = () => {
         }
       });
 
-      // Draw 8-bit frog (Purpe)
-      draw8BitSprite(ctx, frogPosition.x, frogPosition.y, FROG_SIZE, FROG_SIZE, COLORS.frog);
-      
-      // Frog eyes (8-bit style)
-      ctx.fillStyle = COLORS.frogEyes;
-      ctx.fillRect(frogPosition.x + 6, frogPosition.y + 6, 6, 6);
-      ctx.fillRect(frogPosition.x + 16, frogPosition.y + 6, 6, 6);
-      
-      // Pupils
-      ctx.fillStyle = COLORS.frogPupils;
-      ctx.fillRect(frogPosition.x + 8, frogPosition.y + 8, 2, 2);
-      ctx.fillRect(frogPosition.x + 18, frogPosition.y + 8, 2, 2);
+      // Draw animated frog (Purpe)
+      const spriteDrawn = drawSprite(ctx, currentFrame, frogPosition.x, frogPosition.y, FROG_SIZE, FROG_SIZE);
+      if (!spriteDrawn) {
+        // Fallback to basic 8-bit frog if sprite fails
+        draw8BitSprite(ctx, frogPosition.x, frogPosition.y, FROG_SIZE, FROG_SIZE, COLORS.frog);
+        
+        // Frog eyes (8-bit style)
+        ctx.fillStyle = COLORS.frogEyes;
+        ctx.fillRect(frogPosition.x + 6, frogPosition.y + 6, 6, 6);
+        ctx.fillRect(frogPosition.x + 16, frogPosition.y + 6, 6, 6);
+        
+        // Pupils
+        ctx.fillStyle = COLORS.frogPupils;
+        ctx.fillRect(frogPosition.x + 8, frogPosition.y + 8, 2, 2);
+        ctx.fillRect(frogPosition.x + 18, frogPosition.y + 8, 2, 2);
+      }
 
       // 8-bit HUD
       ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
