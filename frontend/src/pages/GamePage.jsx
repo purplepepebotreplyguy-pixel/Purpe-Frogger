@@ -17,11 +17,11 @@ const FROG_SIZE = GRID_SIZE - 2; // Slightly smaller than grid
 const GRID_ROWS = Math.floor(GAME_HEIGHT / GRID_SIZE);
 const GRID_COLS = Math.floor(GAME_WIDTH / GRID_SIZE);
 
-// Sprite sheet configuration
+// Sprite sheet configuration - Based on actual 1024x1024 image
 const SPRITE_CONFIG = {
   url: 'https://raw.githubusercontent.com/purplepepebotreplyguy-pixel/Purpe-Frogger/main/character_sprites_animation_v2.png',
-  frameWidth: 16,
-  frameHeight: 16,
+  frameWidth: Math.floor(1024 / 17), // ~60 pixels per frame (1024/17 = 60.24)
+  frameHeight: 1024, // Full height for now, we'll adjust if needed
   totalFrames: 17,
   layout: { cols: 17, rows: 1 },
   animations: {
