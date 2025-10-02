@@ -709,6 +709,7 @@ export const GamePage = () => {
   // Draw sprite from sprite sheet
   const drawSprite = (ctx, frameIndex, x, y, width = FROG_SIZE, height = FROG_SIZE) => {
     if (!spriteSheet || frameIndex < 0 || frameIndex >= SPRITE_CONFIG.totalFrames) {
+      console.log(`Sprite drawing failed: spriteSheet=${!!spriteSheet}, frameIndex=${frameIndex}, totalFrames=${SPRITE_CONFIG.totalFrames}`);
       return false; // Return false if sprite drawing failed
     }
 
@@ -719,6 +720,12 @@ export const GamePage = () => {
       
       const srcX = col * SPRITE_CONFIG.frameWidth;
       const srcY = row * SPRITE_CONFIG.frameHeight;
+
+      // Debug logging for first few calls
+      if (frameIndex === 0) {
+        console.log(`Drawing sprite: frame=${frameIndex}, col=${col}, row=${row}, srcX=${srcX}, srcY=${srcY}, destX=${x}, destY=${y}`);
+        console.log(`Sprite sheet size: ${spriteSheet.width}x${spriteSheet.height}`);
+      }
 
       // Draw the sprite
       ctx.imageSmoothingEnabled = false;
