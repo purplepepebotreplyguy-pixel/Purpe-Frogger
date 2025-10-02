@@ -1008,7 +1008,7 @@ export const GamePage = () => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [gameState, currentLevel, frogPosition, obstacles, score, lives, walletReady, userStats]);
+  }, [gameState, currentLevel, frogPosition, obstacles, score, lives, walletReady, userStats, spriteSheet, currentFrame, currentAnimation]);
 
   // Handle spacebar to start game
   useEffect(() => {
