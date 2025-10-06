@@ -708,7 +708,7 @@ export const GamePage = () => {
         return;
       }
       
-      // Move frog with moving platform
+      // Move frog with moving platform (logs)
       if (isOnSafePlatform && platformSpeed !== 0) {
         setFrogPosition(prev => {
           const newX = prev.x + platformSpeed;
@@ -721,19 +721,29 @@ export const GamePage = () => {
             setAnimationStartTime(Date.now());
             
             setTimeout(() => {
-              setLives(prevLives => Math.max(0, prevLives - 1));
+              setLives(prevLives => {
+                const newLives = prevLives - 1;
+                if (newLives <= 0) {
+                  setGameState('game_over');
+                  completeGameSession(score, currentLevel - 1);
+                }
+                return newLives;
+              });
+              
+              // Reset frog position and animation
               const startGridX = Math.floor(GRID_COLS / 2);
               const startGridY = GRID_ROWS - 2;
+              setFrogPosition({ 
+                x: startGridX * GRID_SIZE + 2, 
+                y: startGridY * GRID_SIZE + 2,
+                gridX: startGridX,
+                gridY: startGridY
+              });
               setCurrentAnimation('idle');
               setAnimationStartTime(Date.now());
             }, SPRITE_CONFIG.animations.splatter.duration);
             
-            return { 
-              x: startGridX * GRID_SIZE + 2, 
-              y: startGridY * GRID_SIZE + 2,
-              gridX: startGridX,
-              gridY: startGridY
-            };
+            return prev; // Don't move while death animation plays
           }
           
           return {
