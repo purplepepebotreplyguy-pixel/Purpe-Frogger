@@ -282,9 +282,10 @@ export const GamePage = () => {
     return newObstacles;
   }, []);
 
-  // Handle wallet readiness
+  // Handle wallet readiness - DISABLED FOR NOW (saved for future use)
   const handleWalletReady = (ready) => {
-    setWalletReady(ready);
+    // setWalletReady(ready); // Commented out - always allow game access
+    setWalletReady(true); // Always set to true for demo access
   };
 
   // Handle reward earned
