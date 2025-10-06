@@ -218,12 +218,12 @@ export const GamePage = () => {
           });
         }
       } else if (row.type === 'log') {
-        // Create moving logs
+        // Create moving logs (safe rideable platforms)
         const logLength = row.length || 3;
-        const numLogs = Math.ceil(GRID_COLS / (row.spacing || 6)) + 1;
+        const numLogs = Math.ceil(GRID_COLS / (row.spacing || 6)) + 2; // Add extra logs for wrapping
         
         for (let i = 0; i < numLogs; i++) {
-          const startX = (i * (row.spacing || 6) * GRID_SIZE) + ((row.offset || 0) * GRID_SIZE);
+          const startX = (i * (row.spacing || 6) * GRID_SIZE) + ((row.offset || 0) * GRID_SIZE) - GRID_SIZE; // Start slightly off-screen
           newObstacles.push({
             id: `log_${row.y}_${i}`,
             type: 'log',
@@ -231,8 +231,9 @@ export const GamePage = () => {
             y: y,
             width: logLength * GRID_SIZE,
             height: GRID_SIZE,
-            speed: row.speed || 1,
-            safe: true,
+            speed: (row.speed || 1) * 0.5, // Scale speed for better gameplay
+            safe: true, // Logs are safe rideable platforms
+            rideable: true,
             length: logLength
           });
         }
