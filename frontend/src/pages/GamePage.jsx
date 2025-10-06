@@ -929,25 +929,19 @@ export const GamePage = () => {
           ctx.fillRect(previewX + 18, previewY + 8, 2, 2);
         }
         
-        if (walletReady) {
-          ctx.fillStyle = '#00FF00';
-          ctx.font = '14px monospace';
-          ctx.fillText('READY TO PLAY!', GAME_WIDTH / 2, 280);
-          ctx.fillText('PRESS SPACE OR CLICK BUTTONS', GAME_WIDTH / 2, 300);
-          
-          const isDemoMode = localStorage.getItem('demo_mode') === 'true';
-          if (isDemoMode) {
-            ctx.fillStyle = '#FF6600';
-            ctx.fillText('DEMO MODE - NO REWARDS', GAME_WIDTH / 2, 320);
-          } else {
-            ctx.fillStyle = '#FFFF00';
-            ctx.fillText('EARN UP TO 10 PURPE TOKENS!', GAME_WIDTH / 2, 320);
-          }
+        // Always show game ready state (wallet functionality disabled)
+        ctx.fillStyle = '#00FF00';
+        ctx.font = '14px monospace';
+        ctx.fillText('READY TO PLAY!', GAME_WIDTH / 2, 280);
+        ctx.fillText('PRESS SPACE OR CLICK BUTTONS', GAME_WIDTH / 2, 300);
+        
+        const isDemoMode = localStorage.getItem('demo_mode') === 'true';
+        if (isDemoMode) {
+          ctx.fillStyle = '#FF6600';
+          ctx.fillText('DEMO MODE - NO REWARDS', GAME_WIDTH / 2, 320);
         } else {
-          ctx.fillStyle = '#FF0000';
-          ctx.font = '14px monospace';
-          ctx.fillText('CONNECT WALLET OR TRY QUICK START', GAME_WIDTH / 2, 280);
-          ctx.fillText('NEED $10 IN PURPE TOKENS', GAME_WIDTH / 2, 300);
+          ctx.fillStyle = '#FFFF00';
+          ctx.fillText('EARN UP TO 10 PURPE TOKENS!', GAME_WIDTH / 2, 320);
         }
 
         ctx.fillStyle = '#CCCCCC';
