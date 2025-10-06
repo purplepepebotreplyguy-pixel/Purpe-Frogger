@@ -762,9 +762,29 @@ export const GamePage = () => {
         setScore(s => s + 1000 + timeBonus);
 
         if (currentLevel < Object.keys(LEVELS).length) {
-          // Next level
-          setCurrentLevel(prev => {
-            const nextLevel = prev + 1;
+          // Next level exists
+          setGameState('level_complete');
+          setTimeout(() => {
+            setCurrentLevel(prev => {
+              const nextLevel = prev + 1;
+              const startGridX = Math.floor(GRID_COLS / 2);
+              const startGridY = GRID_ROWS - 2;
+              setFrogPosition({ 
+                x: startGridX * GRID_SIZE + 2, 
+                y: startGridY * GRID_SIZE + 2,
+                gridX: startGridX,
+                gridY: startGridY
+              });
+              setObstacles(initializeLevel(nextLevel));
+              setLevelStartTime(Date.now());
+              return nextLevel;
+            });
+            setGameState('playing');
+          }, 2000);
+        } else {
+          // For now, restart level 1 when completed (no more levels defined yet)
+          setGameState('level_complete');
+          setTimeout(() => {
             const startGridX = Math.floor(GRID_COLS / 2);
             const startGridY = GRID_ROWS - 2;
             setFrogPosition({ 
@@ -773,16 +793,11 @@ export const GamePage = () => {
               gridX: startGridX,
               gridY: startGridY
             });
-            setObstacles(initializeLevel(nextLevel));
+            setObstacles(initializeLevel(1));
             setLevelStartTime(Date.now());
-            return nextLevel;
-          });
-          setGameState('level_complete');
-          setTimeout(() => setGameState('playing'), 2000);
-        } else {
-          // Game completed
-          setGameState('game_over');
-          completeGameSession(score + 1000 + timeBonus, currentLevel);
+            setCurrentLevel(1);
+            setGameState('playing');
+          }, 2000);
         }
       }
     };
