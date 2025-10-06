@@ -272,7 +272,8 @@ export const GamePage = () => {
             width: GRID_SIZE,
             height: GRID_SIZE,
             speed: row.speed || 1,
-            safe: false
+            safe: false,
+            rideable: false
           });
         }
       }
