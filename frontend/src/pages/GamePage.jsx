@@ -1283,12 +1283,12 @@ export const GamePage = () => {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Wallet Interface */}
-            <WalletInterface
+            {/* Wallet Interface - DISABLED FOR NOW (saved for future Web3 integration) */}
+            {/* <WalletInterface
               onWalletReady={handleWalletReady}
               tokenBalance={tokenBalance}
               setTokenBalance={setTokenBalance}
-            />
+            /> */}
 
             {/* User Stats */}
             {userStats && (
