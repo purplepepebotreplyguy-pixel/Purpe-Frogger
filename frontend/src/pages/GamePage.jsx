@@ -202,7 +202,7 @@ export const GamePage = () => {
       const y = row.y * GRID_SIZE;
       
       if (row.type === 'lily_pad') {
-        // Create lily pads across the row
+        // Create lily pads across the row (safe platforms)
         for (let col = row.offset || 0; col < GRID_COLS; col += row.spacing || 3) {
           newObstacles.push({
             id: `lily_pad_${row.y}_${col}`,
@@ -214,7 +214,8 @@ export const GamePage = () => {
             width: GRID_SIZE,
             height: GRID_SIZE,
             speed: row.speed || 0,
-            safe: true
+            safe: true, // Lily pads are safe to stand on
+            rideable: false
           });
         }
       } else if (row.type === 'log') {
