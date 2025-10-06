@@ -405,7 +405,58 @@ export const GamePage = () => {
     };
   }, []);
 
-  // Handle frog movement with grid-based positioning
+  // Check if a position is safe to move to (proper Frogger mechanics)
+  const isPositionSafe = useCallback((gridX, gridY) => {
+    const levelConfig = LEVELS[currentLevel];
+    const targetRow = levelConfig?.rows?.find(row => row.y === gridY);
+    
+    // Safe ground areas
+    if (targetRow?.type === 'safe') {
+      return true;
+    }
+    
+    // Water areas - need to be on a platform
+    if (targetRow?.type === 'water' || !targetRow) {
+      // Check if there's a safe platform at this position
+      for (const obstacle of obstacles) {
+        const obstacleGridX = Math.floor(obstacle.x / GRID_SIZE);
+        const obstacleGridY = Math.floor(obstacle.y / GRID_SIZE);
+        const obstacleWidth = Math.ceil(obstacle.width / GRID_SIZE);
+        
+        if (obstacleGridY === gridY && 
+            gridX >= obstacleGridX && 
+            gridX < obstacleGridX + obstacleWidth) {
+          
+          if (obstacle.safe) {
+            return true; // On lily pad or log
+          }
+        }
+      }
+      return false; // Would be in water without platform
+    }
+    
+    // Other row types - check for obstacles
+    for (const obstacle of obstacles) {
+      const obstacleGridX = Math.floor(obstacle.x / GRID_SIZE);
+      const obstacleGridY = Math.floor(obstacle.y / GRID_SIZE);
+      const obstacleWidth = Math.ceil(obstacle.width / GRID_SIZE);
+      
+      if (obstacleGridY === gridY && 
+          gridX >= obstacleGridX && 
+          gridX < obstacleGridX + obstacleWidth) {
+        
+        if (obstacle.safe) {
+          return true;
+        } else if (!obstacle.decorative) {
+          return false; // Would hit dangerous obstacle
+        }
+      }
+    }
+    
+    return true; // Default to safe if no obstacles
+  }, [currentLevel, obstacles]);
+
+  // Handle frog movement with proper Frogger validation
   const moveFrog = useCallback((direction) => {
     if (gameState !== 'playing') return;
     
@@ -414,52 +465,63 @@ export const GamePage = () => {
     
     setLastMoveTime(currentTime);
     
-    // Trigger movement animation
-    if (direction !== lastDirection) {
-      setCurrentAnimation(direction);
-      setAnimationStartTime(currentTime);
-      setLastDirection(direction);
-    }
-    
-    // Reset to idle animation after movement
-    setTimeout(() => {
-      setCurrentAnimation('idle');
-      setAnimationStartTime(Date.now());
-      setLastDirection(null);
-    }, 300);
-    
     setFrogPosition(prev => {
       let newGridX = prev.gridX || Math.floor(prev.x / GRID_SIZE);
       let newGridY = prev.gridY || Math.floor(prev.y / GRID_SIZE);
 
+      // Calculate target position
+      let targetGridX = newGridX;
+      let targetGridY = newGridY;
+
       switch (direction) {
         case 'left':
-          newGridX = Math.max(0, newGridX - 1);
+          targetGridX = Math.max(0, newGridX - 1);
           break;
         case 'right':
-          newGridX = Math.min(GRID_COLS - 1, newGridX + 1);
+          targetGridX = Math.min(GRID_COLS - 1, newGridX + 1);
           break;
         case 'up':
-          newGridY = Math.max(1, newGridY - 1);
-          if (newGridY < (prev.gridY || Math.floor(prev.y / GRID_SIZE))) {
-            setScore(s => s + 10); // Score for moving forward
-          }
+          targetGridY = Math.max(1, newGridY - 1);
           break;
         case 'down':
-          newGridY = Math.min(GRID_ROWS - 2, newGridY + 1);
+          targetGridY = Math.min(GRID_ROWS - 2, newGridY + 1);
           break;
         default:
           return prev;
       }
 
+      // Check if target position is safe
+      if (!isPositionSafe(targetGridX, targetGridY)) {
+        return prev; // Don't allow move to unsafe position
+      }
+
+      // Trigger movement animation
+      if (direction !== lastDirection) {
+        setCurrentAnimation(direction);
+        setAnimationStartTime(currentTime);
+        setLastDirection(direction);
+      }
+      
+      // Reset to idle animation after movement
+      setTimeout(() => {
+        setCurrentAnimation('idle');
+        setAnimationStartTime(Date.now());
+        setLastDirection(null);
+      }, 300);
+
+      // Award points for forward progress
+      if (direction === 'up' && targetGridY < newGridY) {
+        setScore(s => s + 10);
+      }
+
       return { 
-        x: newGridX * GRID_SIZE + 2, 
-        y: newGridY * GRID_SIZE + 2,
-        gridX: newGridX,
-        gridY: newGridY
+        x: targetGridX * GRID_SIZE + 2, 
+        y: targetGridY * GRID_SIZE + 2,
+        gridX: targetGridX,
+        gridY: targetGridY
       };
     });
-  }, [gameState, lastMoveTime, lastDirection]);
+  }, [gameState, lastMoveTime, lastDirection, isPositionSafe]);
 
   // Handle mouse clicks on canvas - grid-based movement
   useEffect(() => {
