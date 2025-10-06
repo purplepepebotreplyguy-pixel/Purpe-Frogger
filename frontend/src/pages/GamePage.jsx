@@ -239,7 +239,7 @@ export const GamePage = () => {
           });
         }
       } else if (row.type === 'rocks') {
-        // Create decorative rocks
+        // Create decorative rocks (not safe, not dangerous)
         for (let col = 0; col < GRID_COLS; col += row.spacing || 4) {
           const rockCol = col + Math.floor(Math.random() * 2); // Some randomness
           if (rockCol < GRID_COLS) {
@@ -254,7 +254,8 @@ export const GamePage = () => {
               height: GRID_SIZE,
               speed: 0,
               safe: false,
-              decorative: true
+              decorative: true,
+              rideable: false
             });
           }
         }
