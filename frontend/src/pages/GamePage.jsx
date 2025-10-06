@@ -304,12 +304,13 @@ export const GamePage = () => {
     setUserStats(stats);
   };
 
-  // Start new game session
+  // Start new game session - WALLET AUTH DISABLED FOR NOW
   const startGameSession = async () => {
-    if (!authToken) {
-      toast.error('Please authenticate your wallet first');
-      return;
-    }
+    // Wallet auth disabled - allow direct game access
+    // if (!authToken) {
+    //   toast.error('Please authenticate your wallet first');
+    //   return;
+    // }
 
     try {
       const response = await axios.post(`${API}/game/start`, {}, {
