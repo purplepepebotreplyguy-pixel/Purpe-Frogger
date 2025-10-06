@@ -1197,12 +1197,11 @@ export const GamePage = () => {
                       <div className="flex space-x-4">
                         <button
                           onClick={startGameSession}
-                          disabled={!walletReady}
-                          className="px-8 py-3 text-white font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg"
-                          style={{background: walletReady ? 'linear-gradient(135deg, #00d084 0%, #0693e3 100%)' : 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'}}
+                          className="px-8 py-3 text-white font-bold rounded-xl transition-all duration-300 shadow-lg"
+                          style={{background: 'linear-gradient(135deg, #00d084 0%, #0693e3 100%)'}}
                           data-testid="start-game-btn"
                         >
-                          {walletReady ? 'Start Your Leap! 🐸' : 'Connect Wallet to Play'}
+                          Start Your Leap! 🐸
                         </button>
                         
                         <button
