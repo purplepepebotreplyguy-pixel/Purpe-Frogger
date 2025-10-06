@@ -69,20 +69,20 @@ const LEVELS = {
     backgroundColor: COLORS.water,
     rows: [
       { type: "safe", y: 1, color: COLORS.grass }, // Top safe zone (goal)
-      { type: "rocks", y: 2, speed: 0, spacing: 4 }, // Decorative rocks
-      { type: "water", y: 3 },
-      { type: "lily_pad", y: 4, speed: 0, spacing: 3, offset: 0 }, // Stationary lily pads
-      { type: "water", y: 5 },
-      { type: "lily_pad", y: 6, speed: 0, spacing: 4, offset: 1 }, // Offset lily pads
-      { type: "water", y: 7 },
-      { type: "log", y: 8, speed: 1, length: 3, spacing: 6, offset: 0 }, // Moving logs
-      { type: "water", y: 9 },
-      { type: "lily_pad", y: 10, speed: 0, spacing: 2, offset: 0 }, // Dense lily pads
-      { type: "water", y: 11 },
-      { type: "log", y: 12, speed: -1, length: 4, spacing: 7, offset: 2 }, // Opposite direction logs
-      { type: "water", y: 13 },
-      { type: "lily_pad", y: 14, speed: 0, spacing: 3, offset: 2 }, // More lily pads
-      { type: "water", y: 15 },
+      { type: "water", y: 2 },
+      { type: "lily_pad", y: 3, speed: 0, spacing: 3, offset: 0 }, // Top lily pads
+      { type: "water", y: 4 },
+      { type: "log", y: 5, speed: 1, length: 3, spacing: 6, offset: 0 }, // Moving logs right
+      { type: "water", y: 6 },
+      { type: "lily_pad", y: 7, speed: 0, spacing: 4, offset: 2 }, // Offset lily pads
+      { type: "water", y: 8 },
+      { type: "log", y: 9, speed: -1.5, length: 2, spacing: 5, offset: 1 }, // Moving logs left
+      { type: "water", y: 10 },
+      { type: "lily_pad", y: 11, speed: 0, spacing: 2, offset: 1 }, // Dense lily pads
+      { type: "water", y: 12 },
+      { type: "log", y: 13, speed: 2, length: 4, spacing: 8, offset: 3 }, // Fast logs right
+      { type: "water", y: 14 },
+      { type: "lily_pad", y: 15, speed: 0, spacing: 3, offset: 0 }, // Bottom lily pads
       { type: "water", y: 16 },
       { type: "safe", y: 17, color: COLORS.grass }, // Bottom safe zone (start)
     ]
