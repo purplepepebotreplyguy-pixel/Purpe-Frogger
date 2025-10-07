@@ -235,6 +235,27 @@ export const GamePage = () => {
             length: logLength
           });
         }
+      } else if (row.type === 'deadly_log') {
+        // Create deadly moving logs (dangerous obstacles)
+        const logLength = row.length || 2;
+        const numLogs = Math.ceil(GRID_COLS / (row.spacing || 8)) + 1; // Fewer deadly logs
+        
+        for (let i = 0; i < numLogs; i++) {
+          const startX = (i * (row.spacing || 8) * GRID_SIZE) + ((row.offset || 0) * GRID_SIZE) - GRID_SIZE;
+          newObstacles.push({
+            id: `deadly_log_${row.y}_${i}`,
+            type: 'deadly_log',
+            x: startX,
+            y: y,
+            width: logLength * GRID_SIZE,
+            height: GRID_SIZE,
+            speed: (row.speed || 1.5) * 0.7, // Slightly faster than safe logs
+            safe: false, // Deadly logs are dangerous
+            rideable: false,
+            length: logLength,
+            deadly: true
+          });
+        }
       } else if (row.type === 'rocks') {
         // Create decorative rocks (not safe, not dangerous)
         for (let col = 0; col < GRID_COLS; col += row.spacing || 4) {
