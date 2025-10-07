@@ -442,9 +442,40 @@ export const GamePage = () => {
     };
   }, []);
 
-  // Check if a position is safe to move to (proper Frogger mechanics)
+  // Check if a position is safe to move to (REVERSED Frogger mechanics for Level 1)
   const isPositionSafe = useCallback((gridX, gridY) => {
     const levelConfig = LEVELS[currentLevel];
+    
+    if (currentLevel === 1) {
+      // REVERSED FROGGER: Water is safe, deadly logs are dangerous
+      
+      // Safe ground areas (start/goal)
+      const targetRow = levelConfig?.rows?.find(row => row.y === gridY && row.type === 'safe');
+      if (targetRow) {
+        return true;
+      }
+      
+      // Water areas are safe UNLESS there's a deadly log
+      // Check if there's a deadly log at this position
+      for (const obstacle of obstacles) {
+        const obstacleGridX = Math.floor(obstacle.x / GRID_SIZE);
+        const obstacleGridY = Math.floor(obstacle.y / GRID_SIZE);
+        const obstacleWidth = Math.ceil(obstacle.width / GRID_SIZE);
+        
+        if (obstacleGridY === gridY && 
+            gridX >= obstacleGridX && 
+            gridX < obstacleGridX + obstacleWidth) {
+          
+          if (obstacle.deadly || obstacle.type === 'deadly_log') {
+            return false; // Would hit deadly log
+          }
+        }
+      }
+      
+      return true; // Water is safe if no deadly logs
+    }
+    
+    // Original Frogger mechanics for other levels (if we add them later)
     const targetRow = levelConfig?.rows?.find(row => row.y === gridY);
     
     // Safe ground areas
@@ -470,24 +501,6 @@ export const GamePage = () => {
         }
       }
       return false; // Would be in water without platform
-    }
-    
-    // Other row types - check for obstacles
-    for (const obstacle of obstacles) {
-      const obstacleGridX = Math.floor(obstacle.x / GRID_SIZE);
-      const obstacleGridY = Math.floor(obstacle.y / GRID_SIZE);
-      const obstacleWidth = Math.ceil(obstacle.width / GRID_SIZE);
-      
-      if (obstacleGridY === gridY && 
-          gridX >= obstacleGridX && 
-          gridX < obstacleGridX + obstacleWidth) {
-        
-        if (obstacle.safe) {
-          return true;
-        } else if (!obstacle.decorative) {
-          return false; // Would hit dangerous obstacle
-        }
-      }
     }
     
     return true; // Default to safe if no obstacles
