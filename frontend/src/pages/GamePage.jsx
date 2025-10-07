@@ -69,31 +69,18 @@ const LEVELS = {
     backgroundColor: COLORS.water,
     rows: [
       { type: "safe", y: 1, color: COLORS.grass }, // Goal line (top)
-      { type: "deadly_log", y: 2, speed: -1.0, length: 2, spacing: 6, offset: 2 }, // Row 1 from code
-      { type: "deadly_log", y: 2, speed: -1.0, length: 3, spacing: 8, offset: 8 },
-      { type: "deadly_log", y: 3, speed: 1.3, length: 5, spacing: 10, offset: 5 }, // Row 2 from code  
-      { type: "deadly_log", y: 4, speed: -0.8, length: 2, spacing: 7, offset: 1 }, // Row 3 from code
-      { type: "deadly_log", y: 4, speed: -0.8, length: 2, spacing: 7, offset: 9 },
-      { type: "deadly_log", y: 5, speed: 1.0, length: 4, spacing: 8, offset: 2 }, // Row 4 from code
-      { type: "deadly_log", y: 5, speed: 1.0, length: 4, spacing: 8, offset: 12 },
-      { type: "deadly_log", y: 6, speed: -1.2, length: 3, spacing: 6, offset: 0 }, // Row 5 from code  
-      { type: "deadly_log", y: 6, speed: -1.2, length: 3, spacing: 6, offset: 6 },
-      { type: "deadly_log", y: 7, speed: 1.5, length: 3, spacing: 8, offset: 1 }, // Row 6 from code
-      { type: "deadly_log", y: 7, speed: 1.5, length: 2, spacing: 8, offset: 11 },
-      { type: "deadly_log", y: 8, speed: -1.6, length: 1, spacing: 5, offset: 4 }, // Row 7 from code
-      { type: "deadly_log", y: 8, speed: -1.6, length: 2, spacing: 5, offset: 10 },
-      { type: "deadly_log", y: 9, speed: 1.0, length: 2, spacing: 6, offset: 0 }, // Row 8 from code
-      { type: "deadly_log", y: 9, speed: 1.0, length: 2, spacing: 6, offset: 5 },
-      { type: "deadly_log", y: 9, speed: 1.0, length: 2, spacing: 6, offset: 10 },
-      { type: "deadly_log", y: 10, speed: -1.4, length: 3, spacing: 7, offset: 4 }, // Row 9 from code
-      { type: "deadly_log", y: 10, speed: -1.4, length: 1, spacing: 7, offset: 12 },
-      { type: "deadly_log", y: 11, speed: 1.3, length: 2, spacing: 5, offset: 1 }, // Row 10 from code
-      { type: "deadly_log", y: 11, speed: 1.3, length: 4, spacing: 5, offset: 7 },
-      { type: "deadly_log", y: 12, speed: -1.8, length: 3, spacing: 8, offset: 2 }, // Row 11 from code
-      { type: "deadly_log", y: 12, speed: -1.8, length: 2, spacing: 8, offset: 11 },
-      { type: "deadly_log", y: 13, speed: 1.5, length: 2, spacing: 6, offset: 0 }, // Row 12 from code
-      { type: "deadly_log", y: 13, speed: 1.5, length: 3, spacing: 6, offset: 6 },
-      { type: "deadly_log", y: 13, speed: 1.5, length: 1, spacing: 6, offset: 12 },
+      { type: "deadly_log", y: 2, speed: -1.33, length: 3, spacing: 10, offset: 5 }, // Reduced logs, increased speed
+      { type: "deadly_log", y: 3, speed: 1.73, length: 5, spacing: 15, offset: 8 }, // Faster, fewer logs
+      { type: "deadly_log", y: 4, speed: -1.07, length: 2, spacing: 12, offset: 3 }, // Reduced volume
+      { type: "deadly_log", y: 5, speed: 1.33, length: 4, spacing: 16, offset: 6 }, // Faster movement
+      { type: "deadly_log", y: 6, speed: -1.6, length: 3, spacing: 14, offset: 2 }, // Higher speed
+      { type: "deadly_log", y: 7, speed: 2.0, length: 2, spacing: 18, offset: 9 }, // Much faster
+      { type: "deadly_log", y: 8, speed: -2.13, length: 1, spacing: 10, offset: 4 }, // Fastest row
+      { type: "deadly_log", y: 9, speed: 1.33, length: 2, spacing: 12, offset: 7 }, // Reduced logs
+      { type: "deadly_log", y: 10, speed: -1.87, length: 2, spacing: 14, offset: 5 }, // Fewer, faster
+      { type: "deadly_log", y: 11, speed: 1.73, length: 3, spacing: 16, offset: 3 }, // High speed
+      { type: "deadly_log", y: 12, speed: -2.4, length: 2, spacing: 18, offset: 8 }, // Very fast
+      { type: "deadly_log", y: 13, speed: 2.0, length: 2, spacing: 15, offset: 4 }, // Fast finish
       { type: "safe", y: 14, color: COLORS.grass }, // Start line (bottom)
     ]
   },
