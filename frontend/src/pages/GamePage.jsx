@@ -64,23 +64,36 @@ const COLORS = {
 // Level configurations - 8-bit style
 const LEVELS = {
   1: {
-    name: "Pepe's Binance Run",
+    name: "Pepe's Binance Run", 
     theme: "reversed_frogger",
     backgroundColor: COLORS.water,
     rows: [
       { type: "safe", y: 1, color: COLORS.grass }, // Goal line (top)
-      { type: "water", y: 2 }, // Safe water
-      { type: "water", y: 3 }, // Safe water  
-      { type: "water", y: 4 }, // Safe water
-      { type: "water", y: 5 }, // Safe water
-      { type: "water", y: 6 }, // Safe water
-      { type: "water", y: 7 }, // Safe water
-      { type: "water", y: 8 }, // Safe water
-      { type: "water", y: 9 }, // Safe water
-      { type: "water", y: 10 }, // Safe water
-      { type: "water", y: 11 }, // Safe water
-      { type: "water", y: 12 }, // Safe water
-      { type: "water", y: 13 }, // Safe water
+      { type: "deadly_log", y: 2, speed: -1.0, length: 2, spacing: 6, offset: 2 }, // Row 1 from code
+      { type: "deadly_log", y: 2, speed: -1.0, length: 3, spacing: 8, offset: 8 },
+      { type: "deadly_log", y: 3, speed: 1.3, length: 5, spacing: 10, offset: 5 }, // Row 2 from code  
+      { type: "deadly_log", y: 4, speed: -0.8, length: 2, spacing: 7, offset: 1 }, // Row 3 from code
+      { type: "deadly_log", y: 4, speed: -0.8, length: 2, spacing: 7, offset: 9 },
+      { type: "deadly_log", y: 5, speed: 1.0, length: 4, spacing: 8, offset: 2 }, // Row 4 from code
+      { type: "deadly_log", y: 5, speed: 1.0, length: 4, spacing: 8, offset: 12 },
+      { type: "deadly_log", y: 6, speed: -1.2, length: 3, spacing: 6, offset: 0 }, // Row 5 from code  
+      { type: "deadly_log", y: 6, speed: -1.2, length: 3, spacing: 6, offset: 6 },
+      { type: "deadly_log", y: 7, speed: 1.5, length: 3, spacing: 8, offset: 1 }, // Row 6 from code
+      { type: "deadly_log", y: 7, speed: 1.5, length: 2, spacing: 8, offset: 11 },
+      { type: "deadly_log", y: 8, speed: -1.6, length: 1, spacing: 5, offset: 4 }, // Row 7 from code
+      { type: "deadly_log", y: 8, speed: -1.6, length: 2, spacing: 5, offset: 10 },
+      { type: "deadly_log", y: 9, speed: 1.0, length: 2, spacing: 6, offset: 0 }, // Row 8 from code
+      { type: "deadly_log", y: 9, speed: 1.0, length: 2, spacing: 6, offset: 5 },
+      { type: "deadly_log", y: 9, speed: 1.0, length: 2, spacing: 6, offset: 10 },
+      { type: "deadly_log", y: 10, speed: -1.4, length: 3, spacing: 7, offset: 4 }, // Row 9 from code
+      { type: "deadly_log", y: 10, speed: -1.4, length: 1, spacing: 7, offset: 12 },
+      { type: "deadly_log", y: 11, speed: 1.3, length: 2, spacing: 5, offset: 1 }, // Row 10 from code
+      { type: "deadly_log", y: 11, speed: 1.3, length: 4, spacing: 5, offset: 7 },
+      { type: "deadly_log", y: 12, speed: -1.8, length: 3, spacing: 8, offset: 2 }, // Row 11 from code
+      { type: "deadly_log", y: 12, speed: -1.8, length: 2, spacing: 8, offset: 11 },
+      { type: "deadly_log", y: 13, speed: 1.5, length: 2, spacing: 6, offset: 0 }, // Row 12 from code
+      { type: "deadly_log", y: 13, speed: 1.5, length: 3, spacing: 6, offset: 6 },
+      { type: "deadly_log", y: 13, speed: 1.5, length: 1, spacing: 6, offset: 12 },
       { type: "safe", y: 14, color: COLORS.grass }, // Start line (bottom)
     ]
   },
