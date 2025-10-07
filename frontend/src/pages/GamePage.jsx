@@ -664,94 +664,146 @@ export const GamePage = () => {
       const frogGridX = frogPosition.gridX;
       const frogGridY = frogPosition.gridY;
       
-      // Check if frog is in water without a platform
+      // Level-specific collision logic
       const levelConfig = LEVELS[currentLevel];
       const currentRow = levelConfig?.rows?.find(row => row.y === frogGridY);
       
       let isOnSafePlatform = false;
       let platformSpeed = 0;
       
-      if (currentRow?.type === 'safe') {
-        isOnSafePlatform = true;
-      } else {
-        // Check if frog is on any obstacle
-        for (const obstacle of obstacles) {
-          const obstacleGridX = Math.floor(obstacle.x / GRID_SIZE);
-          const obstacleGridY = Math.floor(obstacle.y / GRID_SIZE);
-          const obstacleWidth = Math.ceil(obstacle.width / GRID_SIZE);
-          
-          if (obstacleGridY === frogGridY && 
-              frogGridX >= obstacleGridX && 
-              frogGridX < obstacleGridX + obstacleWidth) {
+      if (currentLevel === 1) {
+        // REVERSED FROGGER: Water is safe, logs are deadly
+        if (currentRow?.type === 'safe') {
+          isOnSafePlatform = true;
+        } else {
+          // In water - check if hitting any deadly logs
+          for (const obstacle of obstacles) {
+            const obstacleGridX = Math.floor(obstacle.x / GRID_SIZE);
+            const obstacleGridY = Math.floor(obstacle.y / GRID_SIZE);
+            const obstacleWidth = Math.ceil(obstacle.width / GRID_SIZE);
             
-            if (obstacle.safe) {
-              isOnSafePlatform = true;
-              platformSpeed = obstacle.speed || 0;
-              break;
-            } else if (!obstacle.decorative) {
-              // Hit a dangerous obstacle - trigger death animation
-              setCurrentAnimation('splatter');
-              setAnimationStartTime(Date.now());
+            if (obstacleGridY === frogGridY && 
+                frogGridX >= obstacleGridX && 
+                frogGridX < obstacleGridX + obstacleWidth) {
               
-              setTimeout(() => {
-                setLives(prev => {
-                  const newLives = prev - 1;
-                  if (newLives <= 0) {
-                    setGameState('game_over');
-                    completeGameSession(score, currentLevel - 1);
-                  }
-                  return newLives;
-                });
-                
-                // Reset frog position and animation
-                const startGridX = Math.floor(GRID_COLS / 2);
-                const startGridY = GRID_ROWS - 2;
-                setFrogPosition({ 
-                  x: startGridX * GRID_SIZE + 2, 
-                  y: startGridY * GRID_SIZE + 2,
-                  gridX: startGridX,
-                  gridY: startGridY
-                });
-                setCurrentAnimation('idle');
+              if (obstacle.deadly || obstacle.type === 'deadly_log') {
+                // Hit a deadly log - trigger death
+                setCurrentAnimation('splatter');
                 setAnimationStartTime(Date.now());
-              }, SPRITE_CONFIG.animations.splatter.duration);
+                
+                setTimeout(() => {
+                  setLives(prev => {
+                    const newLives = prev - 1;
+                    if (newLives <= 0) {
+                      setGameState('game_over');
+                      completeGameSession(score, currentLevel - 1);
+                    }
+                    return newLives;
+                  });
+                  
+                  // Reset frog position and animation
+                  const startGridX = Math.floor(GRID_COLS / 2);
+                  const startGridY = GRID_ROWS - 2;
+                  setFrogPosition({ 
+                    x: startGridX * GRID_SIZE + 2, 
+                    y: startGridY * GRID_SIZE + 2,
+                    gridX: startGridX,
+                    gridY: startGridY
+                  });
+                  setCurrentAnimation('idle');
+                  setAnimationStartTime(Date.now());
+                }, SPRITE_CONFIG.animations.splatter.duration);
+                
+                return;
+              }
+            }
+          }
+          // In water but no deadly logs - safe
+          isOnSafePlatform = true;
+        }
+      } else {
+        // Original Frogger mechanics for other levels
+        if (currentRow?.type === 'safe') {
+          isOnSafePlatform = true;
+        } else {
+          // Check if frog is on any obstacle
+          for (const obstacle of obstacles) {
+            const obstacleGridX = Math.floor(obstacle.x / GRID_SIZE);
+            const obstacleGridY = Math.floor(obstacle.y / GRID_SIZE);
+            const obstacleWidth = Math.ceil(obstacle.width / GRID_SIZE);
+            
+            if (obstacleGridY === frogGridY && 
+                frogGridX >= obstacleGridX && 
+                frogGridX < obstacleGridX + obstacleWidth) {
               
-              return;
+              if (obstacle.safe) {
+                isOnSafePlatform = true;
+                platformSpeed = obstacle.speed || 0;
+                break;
+              } else if (!obstacle.decorative) {
+                // Hit a dangerous obstacle
+                setCurrentAnimation('splatter');
+                setAnimationStartTime(Date.now());
+                
+                setTimeout(() => {
+                  setLives(prev => {
+                    const newLives = prev - 1;
+                    if (newLives <= 0) {
+                      setGameState('game_over');
+                      completeGameSession(score, currentLevel - 1);
+                    }
+                    return newLives;
+                  });
+                  
+                  // Reset frog position and animation
+                  const startGridX = Math.floor(GRID_COLS / 2);
+                  const startGridY = GRID_ROWS - 2;
+                  setFrogPosition({ 
+                    x: startGridX * GRID_SIZE + 2, 
+                    y: startGridY * GRID_SIZE + 2,
+                    gridX: startGridX,
+                    gridY: startGridY
+                  });
+                  setCurrentAnimation('idle');
+                  setAnimationStartTime(Date.now());
+                }, SPRITE_CONFIG.animations.splatter.duration);
+                
+                return;
+              }
             }
           }
         }
-      }
-      
-      // If in water without platform, frog drowns
-      if (!isOnSafePlatform && currentRow?.type !== 'safe') {
-        // Trigger death animation
-        setCurrentAnimation('splatter');
-        setAnimationStartTime(Date.now());
         
-        setTimeout(() => {
-          setLives(prev => {
-            const newLives = prev - 1;
-            if (newLives <= 0) {
-              setGameState('game_over');
-              completeGameSession(score, currentLevel - 1);
-            }
-            return newLives;
-          });
-          
-          // Reset frog position and animation
-          const startGridX = Math.floor(GRID_COLS / 2);
-          const startGridY = GRID_ROWS - 2;
-          setFrogPosition({ 
-            x: startGridX * GRID_SIZE + 2, 
-            y: startGridY * GRID_SIZE + 2,
-            gridX: startGridX,
-            gridY: startGridY
-          });
-          setCurrentAnimation('idle');
+        // If in water without platform, frog drowns (original mechanic)
+        if (!isOnSafePlatform && currentRow?.type !== 'safe') {
+          setCurrentAnimation('splatter');
           setAnimationStartTime(Date.now());
-        }, SPRITE_CONFIG.animations.splatter.duration);
-        
-        return;
+          
+          setTimeout(() => {
+            setLives(prev => {
+              const newLives = prev - 1;
+              if (newLives <= 0) {
+                setGameState('game_over');
+                completeGameSession(score, currentLevel - 1);
+              }
+              return newLives;
+            });
+            
+            // Reset frog position and animation
+            const startGridX = Math.floor(GRID_COLS / 2);
+            const startGridY = GRID_ROWS - 2;
+            setFrogPosition({ 
+              x: startGridX * GRID_SIZE + 2, 
+              y: startGridY * GRID_SIZE + 2,
+              gridX: startGridX,
+              gridY: startGridY
+            });
+            setCurrentAnimation('idle');
+            setAnimationStartTime(Date.now());
+          }, SPRITE_CONFIG.animations.splatter.duration);
+          
+          return;
+        }
       }
       
       // Move frog with moving platform (logs)
