@@ -64,27 +64,24 @@ const COLORS = {
 // Level configurations - 8-bit style
 const LEVELS = {
   1: {
-    name: "Lily Pond",
-    theme: "pond", 
+    name: "Pepe's Binance Run",
+    theme: "reversed_frogger",
     backgroundColor: COLORS.water,
     rows: [
-      { type: "safe", y: 1, color: COLORS.grass }, // Top safe zone (goal)
-      { type: "lily_pad", y: 2, speed: 0, spacing: 2, offset: 0 }, // Top lily pads - close spacing
-      { type: "water", y: 3 },
-      { type: "log", y: 4, speed: 0.5, length: 3, spacing: 4, offset: 0 }, // Slower logs, closer spacing
-      { type: "water", y: 5 },
-      { type: "lily_pad", y: 6, speed: 0, spacing: 2, offset: 1 }, // Close lily pads
-      { type: "water", y: 7 },
-      { type: "log", y: 8, speed: -0.7, length: 4, spacing: 5, offset: 2 }, // Slower logs left
-      { type: "water", y: 9 },
-      { type: "lily_pad", y: 10, speed: 0, spacing: 2, offset: 0 }, // Dense lily pads
-      { type: "water", y: 11 },
-      { type: "log", y: 12, speed: 0.8, length: 3, spacing: 4, offset: 1 }, // Medium speed logs
-      { type: "water", y: 13 },
-      { type: "lily_pad", y: 14, speed: 0, spacing: 2, offset: 1 }, // Bottom lily pads - close
-      { type: "water", y: 15 },
-      { type: "lily_pad", y: 16, speed: 0, spacing: 2, offset: 0 }, // Extra lily pads near start
-      { type: "safe", y: 17, color: COLORS.grass }, // Bottom safe zone (start)
+      { type: "safe", y: 1, color: COLORS.grass }, // Goal line (top)
+      { type: "water", y: 2 }, // Safe water
+      { type: "water", y: 3 }, // Safe water  
+      { type: "water", y: 4 }, // Safe water
+      { type: "water", y: 5 }, // Safe water
+      { type: "water", y: 6 }, // Safe water
+      { type: "water", y: 7 }, // Safe water
+      { type: "water", y: 8 }, // Safe water
+      { type: "water", y: 9 }, // Safe water
+      { type: "water", y: 10 }, // Safe water
+      { type: "water", y: 11 }, // Safe water
+      { type: "water", y: 12 }, // Safe water
+      { type: "water", y: 13 }, // Safe water
+      { type: "safe", y: 14, color: COLORS.grass }, // Start line (bottom)
     ]
   },
   2: {
