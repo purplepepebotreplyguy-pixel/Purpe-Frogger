@@ -1030,6 +1030,10 @@ export const GamePage = () => {
             draw8BitSprite(ctx, obstacle.x, obstacle.y, obstacle.width, obstacle.height,
               COLORS.log, { type: 'woodgrain', color: COLORS.logPattern });
             break;
+          case 'deadly_log':
+            draw8BitSprite(ctx, obstacle.x, obstacle.y, obstacle.width, obstacle.height,
+              '#8B0000', { type: 'woodgrain', color: '#FF4500' }); // Dark red with orange pattern
+            break;
           case 'rock':
             draw8BitSprite(ctx, obstacle.x, obstacle.y, obstacle.width, obstacle.height, COLORS.rocks);
             break;
